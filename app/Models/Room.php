@@ -24,6 +24,7 @@ class Room extends Model
         'capacity',
         'image',
         'description',
+        'amount',
         'created_at',
         'updated_at',
         'deleted_at',

@@ -76,16 +76,19 @@ class RoomsController extends Controller
         // $room = Room::create($request->all());
 
         $request->validate([
-			'room_id' => 'required',
+			'room_type_id' => 'required',
 			'name' => 'required',
 			'capacity' => 'required',
+			'amount' => 'required'
         ]);
         
         $room = Room::create([
-			'room_id' => $request->get('room_id'),
+			'featured' => $request->get('featured'),
+			'amount' => $request->get('amount'),
+			'room_type_id' => $request->get('room_type_id'),
 			'name' => $request->get('name'),
 			'capacity' => $request->get('capacity'),
-			'description' => $request->get('description')
+			'description' => $request->get('description'),
         ]);
         
         if($file = $request->file('image')){
@@ -95,10 +98,7 @@ class RoomsController extends Controller
                 'image' => $fileName
             ]);
         }
-
-		
         
-
         return redirect()->route('admin.rooms.index');
     }
 

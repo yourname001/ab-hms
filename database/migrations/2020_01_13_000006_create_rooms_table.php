@@ -12,6 +12,7 @@ class CreateRoomsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('amount')->default(0);
             $table->integer('featured')->default(0);
+            $table->integer('capacity');
             $table->unsignedBigInteger('room_type_id');
             $table->foreign('room_type_id')
 				->references('id')->on('room_types')

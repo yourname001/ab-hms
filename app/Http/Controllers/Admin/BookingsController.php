@@ -65,7 +65,17 @@ class BookingsController extends Controller
 
     public function store(StoreBookingRequest $request)
     {
-        $booking = Booking::create($request->all());
+        // $booking = Booking::create($request->all());
+        $room = Room::find($request->get('room_id'));
+        $booking = Booking::create([
+            'room_id' => $request->get('room_id'),
+            'status' => 1,
+            'user_id' => is_null($request->get('user_id')) ? Auth::user()->id : $request->get('user_id'),
+            'amount' => $request->get('amount'),
+            'payment_status' => 0,
+            'booking_date' => $request->get('booking_date'),
+            'amount' => $room->amount
+        ]);
 
         return redirect()->route('admin.bookings.index');
     }

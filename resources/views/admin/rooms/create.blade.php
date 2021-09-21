@@ -7,7 +7,7 @@
     </div>
 
     <div class="card-body">
-        <form method="POST" action="{{ route("admin.rooms.store") }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route("admin.rooms.store") }}" enctype="multipart/form-data" autocomplete="off">
             @csrf
             <div class="form-group">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addImage">Add Image</button>
@@ -59,6 +59,20 @@
                 <div class="col-md-6">
                     <label class="required">Capacity</label>
                     <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="number" name="capacity">
+                    @if($errors->has('capacity'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('capacity') }}
+                        </div>
+                    @endif
+                </div>
+                <div class="col-md-6">
+                    <label class="required">Amount</label>
+                    <input type="number" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" name="amount">
+                    @if($errors->has('amount'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('amount') }}
+                        </div>
+                    @endif
                 </div>
                 <div class="col-md-6">
                     <div class="form-group form-check">

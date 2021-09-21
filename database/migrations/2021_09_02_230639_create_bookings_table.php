@@ -20,7 +20,9 @@ class CreateBookingsTable extends Migration
 				->references('id')->on('users')
 				->onDelete('cascade')
 				->onUpdate('cascade');
-            $table->date('booking_date');
+            $table->timestamp('booking_date');
+            $table->integer('amount')->default(0);
+            $table->smallInteger('payment_status')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
