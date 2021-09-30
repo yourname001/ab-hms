@@ -1,5 +1,5 @@
-@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900&display=swap");
-@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900&display=swap");
+/* @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900&display=swap"); */
+/* @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900&display=swap"); */
 .flex-center-start {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -84,10 +84,10 @@ p {
     font-family: "Raleway", sans-serif;
 }
 label {
-    color: #7e7e7e;
+    color: #000;
     cursor: pointer;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: bold;
 }
 *::-moz-selection {
     background: #444;
@@ -592,6 +592,25 @@ h3 {
     border: 1px solid transparent;
     color: #fff;
 }
+
+.link-button {
+    background: #009dff;
+    padding: 12px 26px;
+    font-size: 14px;
+    font-weight: 400;
+    border: 1px solid transparent;
+    color: #fff;
+}
+
+.link-button-sm {
+    background: #009dff;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: 400;
+    border: 1px solid transparent;
+    color: #fff;
+}
+
 .header-area .main-header-area .book_room .book_btn a:hover {
     background: #fff;
     color: #009dff;
@@ -1603,7 +1622,7 @@ h3 {
     background-size: cover;
     background-position: center center;
     text-align: center;
-    padding: 269px 0 159px 0;
+    padding: 110px 0 100px 0;
 }
 @media (max-width: 767px) {
     .bradcam_area {

@@ -10,8 +10,8 @@ class CreateRoomsTable extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('amount')->default(0);
-            $table->integer('featured')->default(0);
+            $table->integer('amount')->default(0)->nullable();
+            $table->integer('featured')->default(0)->nullable();
             $table->integer('capacity');
             $table->unsignedBigInteger('room_type_id');
             $table->foreign('room_type_id')

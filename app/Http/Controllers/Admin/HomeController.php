@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Hotel;
 use App\Models\Room;
 use App\Models\RoomType;
 use Carbon\CarbonPeriod;
@@ -34,9 +33,6 @@ class HomeController
         $selectedWeek = $period->toArray();
 
         $rooms = Room::filters()
-            ->with(['hotel', 'room_type', 'roomBookings' => function($query) use ($weekInput) {
-                $query->whereBetween('booking_date', count($weekInput) === 2 ? $weekInput : [ now()->startOfWeek(), now()->endOfWeek() ]);
-            }])
             ->take(101)
             ->get();
 

@@ -12,14 +12,23 @@ use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\DB;
 
 class BookingsController extends Controller
 {
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Booking::with(['room'])->select(sprintf('%s.*', (new Booking)->table));
-            $table = Datatables::of($query);
+            $bookings = Booking::with(['room', 'client'=>function($q){
+                $q->select([
+                    'id',
+                    DB::raw("CONCAT(first_name,' ',last_name) AS clientname")
+                ]);
+            }])
+            ->get(); // used get() to query the concat columns
+            // ->select(sprintf('%s.*', (new Booking)->table));
+            $table = Datatables::of($bookings);
+
 
             $table->addColumn('placeholder', '&nbsp;');
             $table->addColumn('actions', '&nbsp;');
@@ -39,14 +48,31 @@ class BookingsController extends Controller
                 ));
             });
 
-            $table->editColumn('id', function ($row) {
+            $table->addColumn('id', function ($row) {
                 return $row->id ? $row->id : "";
             });
+
+            $table->addColumn('booking_status', function ($row) {
+                return $row->getBookingStatus() ? $row->getBookingStatus() : "";
+            });
+
+            $table->addColumn('booking_date_from', function ($row) {
+                return $row->booking_date_from ? date('Y-m-d', strtotime($row->booking_date_from)) : "";
+            });
+
+            $table->addColumn('booking_date_to', function ($row) {
+                return $row->booking_date_to ? date('Y-m-d', strtotime($row->booking_date_to)) : "";
+            });
+
+            $table->addColumn('client_name', function ($row) {
+                return $row->client ? $row->client->clientname : '';
+            });
+
             $table->addColumn('room_name', function ($row) {
                 return $row->room ? $row->room->name : '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'room']);
+            $table->rawColumns(['actions', 'placeholder', 'booking_status']);
 
             return $table->make(true);
         }
@@ -122,4 +148,32 @@ class BookingsController extends Controller
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
+
+    public function confirm(Booking $booking)
+    {
+        $booking->update([
+            'booking_status' => 'confirmed'
+        ]);
+
+        return redirect()->route('admin.bookings.show', $booking->booking_id);
+    }
+
+    public function checkIn(Booking $booking)
+    {
+        $booking->update([
+            'booking_status' => 'checked in'
+        ]);
+
+        return redirect()->route('admin.bookings.show', $booking->booking_id);
+    }
+
+    public function cancel(Booking $booking)
+    {
+        $booking->update([
+            'booking_status' => 'canceled'
+        ]);
+
+        return redirect()->route('admin.bookings.show', $booking->booking_id);
+    }
+    
 }

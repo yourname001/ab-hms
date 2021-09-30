@@ -20,9 +20,11 @@ class CreateBookingsTable extends Migration
 				->references('id')->on('users')
 				->onDelete('cascade')
 				->onUpdate('cascade');
-            $table->timestamp('booking_date');
-            $table->integer('amount')->default(0);
-            $table->smallInteger('payment_status')->default(0);
+            $table->timestamp('booking_date_from')->nullable();
+            $table->timestamp('booking_date_to')->nullable();
+            $table->integer('amount')->default(0)->nullable();
+            $table->enum('payment_status', ['unpaid', 'partial', 'paid']);
+            $table->enum('booking_status', ['pending', 'confirmed', 'checked in', 'canceled', 'expired']);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -11,7 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use SoftDeletes, Notifiable, HasApiTokens;
 
@@ -43,12 +43,26 @@ class User extends Authenticatable
         'email_verified_at',
     ];
 
+    public function getFullName($type)
+    {
+        $full_name = "";
+        switch ($type) {
+            case 'fnf':
+                $full_name = $this->first_name . " " . $this->last_name;
+                break;
+            case 'lnf':
+                $full_name = $this->last_name . ", " . $this->first_name;
+                break;
+        }
+        return $full_name;
+    }
+
     public function getIsAdminAttribute()
     {
         return $this->roles()->where('id', 1)->exists();
     }
 
-    public function getEmailVerifiedAtAttribute($value)
+    /* public function getEmailVerifiedAtAttribute($value)
     {
         return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('panel.date_format') . ' ' . config('panel.time_format')) : null;
     }
@@ -68,7 +82,7 @@ class User extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPassword($token));
-    }
+    } */
 
     public function roles()
     {

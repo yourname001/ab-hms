@@ -15,6 +15,14 @@ class CreatePaymentsTable extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('proof_of_payment')->nullable();
+            $table->enum('payment_status', ['pending', 'confirmed', 'denied']);
+            $table->unsignedBigInteger('booking_id');
+            $table->foreign('booking_id')
+                ->references('id')->on('bookings')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->integer('amount')->default(0)->nullable();
             $table->timestamps();
         });
     }

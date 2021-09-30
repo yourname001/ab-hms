@@ -16,7 +16,6 @@
                         <div class="modal-content">
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <label>Profile Image:</label>
                                     <img id="img" width="100%" class="img-thumbnail" style="border: none; background-color: transparent" src="{{ asset('images/image-icon.png') }}" />
                                     <label class="btn btn-primary btn-block">
                                         Browse&hellip;<input value="" type="file" name="image" style="display: none;" id="upload" accept="image/*" />
@@ -58,7 +57,7 @@
             <div class="form-group row">
                 <div class="col-md-6">
                     <label class="required">Capacity</label>
-                    <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="number" name="capacity">
+                    <input class="form-control {{ $errors->has('capacity') ? 'is-invalid' : '' }}" type="number" name="capacity" value="{{ old('capacity', '') }}">
                     @if($errors->has('capacity'))
                         <div class="invalid-feedback">
                             {{ $errors->first('capacity') }}
@@ -67,7 +66,7 @@
                 </div>
                 <div class="col-md-6">
                     <label class="required">Amount</label>
-                    <input type="number" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" name="amount">
+                    <input type="number" class="form-control {{ $errors->has('amount') ? 'is-invalid' : '' }}" name="amount" value="{{ old('amount', '') }}">
                     @if($errors->has('amount'))
                         <div class="invalid-feedback">
                             {{ $errors->first('amount') }}
@@ -76,13 +75,13 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group form-check">
-                        <input type="checkbox" class="form-check-input" id="featured" value="1">
+                        <input type="checkbox" class="form-check-input" id="featured" value="1" @if(old('featured')) checked @endif>
                         <label class="form-check-label" for="featured">Featured</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label>Description</label>
-                    <textarea class="form-control" name="description" cols="30" rows="10"></textarea>
+                    <textarea class="form-control" name="description" cols="30" rows="10">{{ old('name', '') }}</textarea>
                 </div>
             </div>
             <div class="form-group">

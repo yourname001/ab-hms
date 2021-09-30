@@ -26,6 +26,9 @@
                             {{ trans('cruds.user.fields.id') }}
                         </th>
                         <th>
+                            Verified
+                        </th>
+                        <th>
                             First Name
                         </th>
                         <th>
@@ -56,6 +59,9 @@
                             </td>
                             <td>
                                 {{ $user->id ?? '' }}
+                            </td>
+                            <td class="{{ is_null($user->email_verified_at) ? 'table-warning' : 'table-success' }}">
+                                {{ is_null($user->email_verified_at) ? 'None' : 'Verified' }}
                             </td>
                             <td>
                                 {{ $user->first_name ?? '' }}

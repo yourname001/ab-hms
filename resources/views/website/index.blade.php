@@ -3,6 +3,29 @@
 <!-- slider_area_start -->
 <div class="slider_area">
     <div class="slider_active owl-carousel">
+        @auth
+        @if(is_null(Auth::user()->email_verified_at))
+        <div class="single_slider d-flex align-items-center justify-content-center slider_bg_1">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="slider_text text-center">
+                            @if (session('message'))
+                                <div class="alert alert-success">
+                                    <h4>{{ session('message') }}</h4>
+                                </div>
+                            @else
+                                <div class="alert alert-warning">
+                                    <h4>Email not Verified</h4>
+                                    <h5>You must verify your email first. If your email verification is expired, click <a class="link-button-sm" href="javascript:void(0)" onclick="event.preventDefault(); document.getElementById('verificationEmail').submit();">here</a></h5>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @else
         <div class="single_slider d-flex align-items-center justify-content-center slider_bg_1">
             <div class="container">
                 <div class="row">
@@ -51,8 +74,75 @@
                 </div>
             </div>
         </div>
+        @endif
+        @endauth
+        @guest
+        <div class="single_slider d-flex align-items-center justify-content-center slider_bg_1">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="slider_text text-center">
+                            <h3>Qatara Family Resort</h3>
+                            {{-- <p>Unlock to enjoy the view of Martine</p> --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="single_slider  d-flex align-items-center justify-content-center slider_bg_2">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="slider_text text-center">
+                            {{-- <h3>Life is Beautiful</h3> --}}
+                            {{-- <p>Unlock to enjoy the view of Martine</p> --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="single_slider  d-flex align-items-center justify-content-center slider_bg_3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="slider_text text-center">
+                            {{-- <h3>Life is Beautiful</h3> --}}
+                            {{-- <p>Unlock to enjoy the view of Martine</p> --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="single_slider  d-flex align-items-center justify-content-center slider_bg_4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="slider_text text-center">
+                            {{-- <h3>Life is Beautiful</h3> --}}
+                            {{-- <p>Unlock to enjoy the view of Martine</p> --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endguest
     </div>
 </div>
+{{-- <div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col text-center">
+            <div class="card">
+                <div class="card-body">
+                    <p>
+                        
+                    </p>
+                    Resend Veryfication Email</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> --}}
+
 <!-- slider_area_end -->
 
 <!-- about_area_start -->

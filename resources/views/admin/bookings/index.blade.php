@@ -22,13 +22,22 @@
 
                     </th>
                     <th>
-                        {{ trans('cruds.booking.fields.id') }}
+                        ID
                     </th>
                     <th>
-                        {{ trans('cruds.booking.fields.room') }}
+                        Status
                     </th>
                     <th>
-                        {{ trans('cruds.booking.fields.booking_date') }}
+                        Client Name
+                    </th>
+                    <th>
+                        Room
+                    </th>
+                    <th>
+                        Booking Date From
+                    </th>
+                    <th>
+                        Booking Date To
                     </th>
                     <th>
                         &nbsp;
@@ -46,58 +55,61 @@
 @parent
 <script>
     $(function () {
-  let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-@can('booking_delete')
-  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
-  let deleteButton = {
-    text: deleteButtonTrans,
-    url: "{{ route('admin.bookings.massDestroy') }}",
-    className: 'btn-danger',
-    action: function (e, dt, node, config) {
-      var ids = $.map(dt.rows({ selected: true }).data(), function (entry) {
-          return entry.id
-      });
+    let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+    @can('booking_delete')
+    let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
+    let deleteButton = {
+        text: deleteButtonTrans,
+        url: "{{ route('admin.bookings.massDestroy') }}",
+        className: 'btn-danger',
+        action: function (e, dt, node, config) {
+            var ids = $.map(dt.rows({ selected: true }).data(), function (entry) {
+                return entry.id
+            });
 
-      if (ids.length === 0) {
-        alert('{{ trans('global.datatables.zero_selected') }}')
+            if (ids.length === 0) {
+                alert('{{ trans('global.datatables.zero_selected') }}')
 
-        return
-      }
+                return
+            }
 
-      if (confirm('{{ trans('global.areYouSure') }}')) {
-        $.ajax({
-          headers: {'x-csrf-token': _token},
-          method: 'POST',
-          url: config.url,
-          data: { ids: ids, _method: 'DELETE' }})
-          .done(function () { location.reload() })
-      }
+            if (confirm('{{ trans('global.areYouSure') }}')) {
+                $.ajax({
+                headers: {'x-csrf-token': _token},
+                method: 'POST',
+                url: config.url,
+                data: { ids: ids, _method: 'DELETE' }})
+                .done(function () { location.reload() })
+            }
+        }
     }
-  }
-  dtButtons.push(deleteButton)
-@endcan
+    dtButtons.push(deleteButton)
+    @endcan
 
-  let dtOverrideGlobals = {
-    buttons: dtButtons,
-    processing: true,
-    serverSide: true,
-    retrieve: true,
-    aaSorting: [],
-    ajax: "{{ route('admin.bookings.index') }}",
-    columns: [
-      { data: 'placeholder', name: 'placeholder' },
-{ data: 'id', name: 'id' },
-{ data: 'room_name', name: 'room.name' },
-{ data: 'booking_date', name: 'booking_date' },
-{ data: 'actions', name: '{{ trans('global.actions') }}' }
-    ],
-    order: [[ 1, 'desc' ]],
-    pageLength: 100,
-  };
-  $('.datatable-Booking').DataTable(dtOverrideGlobals);
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
-        $($.fn.dataTable.tables(true)).DataTable()
-            .columns.adjust();
+    let dtOverrideGlobals = {
+        buttons: dtButtons,
+        processing: true,
+        serverSide: true,
+        retrieve: true,
+        aaSorting: [],
+        ajax: "{{ route('admin.bookings.index') }}",
+        columns: [
+            { data: 'placeholder', name: 'placeholder' },
+            { data: 'id', name: 'id' },
+            { data: 'booking_status', name: 'booking_status' },
+            { data: 'client_name', name: 'client.clientname'},
+            { data: 'room_name', name: 'room.name' },
+            { data: 'booking_date_from', name: 'booking_date_from' },
+            { data: 'booking_date_to', name: 'booking_date_to' },
+            { data: 'actions', name: '{{ trans('global.actions') }}' }
+        ],
+        order: [[ 1, 'desc' ]],
+        pageLength: 100,
+    };
+    $('.datatable-Booking').DataTable(dtOverrideGlobals);
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
+            $($.fn.dataTable.tables(true)).DataTable()
+                .columns.adjust();
     });
 });
 

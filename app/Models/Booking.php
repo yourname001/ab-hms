@@ -12,22 +12,25 @@ class Booking extends Model
 
     public $table = 'bookings';
 
-    protected $dates = [
+    /* protected $dates = [
         'updated_at',
         'created_at',
         'deleted_at',
-        'booking_date',
-    ];
+        'booking_date_from',
+        'booking_date_to',
+    ]; */
 
     protected $fillable = [
         'room_id',
         'user_id',
+        'booking_date_from',
+        'booking_date_to',
         'amount',
         'payment_status',
+        'booking_status',
         'created_at',
         'updated_at',
         'deleted_at',
-        'booking_date',
     ];
 
     public function room()
@@ -35,11 +38,15 @@ class Booking extends Model
         return $this->belongsTo(Room::class, 'room_id');
     }
 
+    public function client() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function payments() {
         return $this->hasMany('App\Models\Payment', 'booking_id');
     }
 
-    public function getBookingDateAttribute($value)
+    /* public function getBookingDateAttribute($value)
     {
         return $value ? Carbon::parse($value)->format(config('panel.date_format')) : null;
     }
@@ -47,5 +54,45 @@ class Booking extends Model
     public function setBookingDateAttribute($value)
     {
         $this->attributes['booking_date'] = $value ? Carbon::createFromFormat(config('panel.date_format'), $value)->format('Y-m-d') : null;
+    } */
+
+    public function getBookingStatus()
+    {
+        $status = "";
+        switch($this->booking_status){
+            case 'pending':
+                $status = '<span class="badge badge-warning">Pending</span>';
+                break;
+            case 'confirmed':
+                $status = '<span class="badge badge-primary">Confirmed</span>';
+                break;
+            case 'checked in':
+                $status = '<span class="badge badge-success">Checked In</span>';
+                break;
+            case 'canceled':
+                $status = '<span class="badge badge-danger">Canceled</span>';
+                break;
+            case 'expired':
+                $status = '<span class="badge badge-danger">Expired</span>';
+                break;
+        }
+        return $status;
+    }
+
+    public function getPaymentStatus()
+    {
+        $status = "";
+        switch($this->payment_status){
+            case 'unpaid':
+                $status = '<span class="badge badge-warning">Unpaid</span>';
+                break;
+            case 'partial':
+                $status = '<span class="badge badge-primary">Partial</span>';
+                break;
+            case 'paid':
+                $status = '<span class="badge badge-success">Paid</span>';
+                break;
+        }
+        return $status;
     }
 }

@@ -1,22 +1,32 @@
 <?php
+use Illuminate\Http\Request;
 
 // Route::redirect('/', '/login');
 Route::get('/home', function () {
-    if (session('status')) {
+    /* if (session('status')) {
         return redirect()->route('admin.home')->with('status', session('status'));
     }
 
-    return redirect()->route('admin.home');
-    // return redirect()->route('/');
+    return redirect()->route('admin.home'); */
+    return redirect()->route('resort.index');
 });
+
+/* Resend Verification Email */
+
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 Route::get('/resort', function () {
     return redirect()->route('resort.index');
     // return redirect()->route('/');
-});
+})->middleware('verified');
 
 // Auth::routes(['register' => false]);
-Auth::routes();
+Auth::routes(['verify' => true]);
 // Admin
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
@@ -48,6 +58,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Bookings
     Route::delete('bookings/destroy', 'BookingsController@massDestroy')->name('bookings.massDestroy');
     Route::resource('bookings', 'BookingsController');
+    Route::get('bookings/confirm/{booking}', 'BookingsController@confirm')->name('bookings.confirm');
+    Route::get('bookings/check-in/{booking}', 'BookingsController@checkIn')->name('bookings.check_in');
+    Route::get('bookings/cancel/{booking}', 'BookingsController@clientCheckedIn')->name('bookings.cancel');
 });
 
 // Client
@@ -58,3 +71,11 @@ Route::get('/', function () {
 Route::resource('resort', 'Website\HomeController')->parameters([
     'resort' => 'homes'
 ]);
+Route::group(array('middleware'=>['auth']), function() {
+    Route::resource('client_bookings', 'Website\BookingController')->parameters([
+		'client_bookings' => 'booking'
+    ]);
+    Route::get('client_cooking/payments/{booking}', 'Website\BookingController@payments')->name('client_bookings.payments');
+    Route::post('filter_rooms', 'Admin\RoomsController@filter_rooms');
+    Route::resource('payments', 'Website\PaymentController');
+});

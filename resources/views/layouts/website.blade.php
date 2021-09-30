@@ -3,21 +3,22 @@
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Qatara Family Resort</title>
-    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>Qatara Family Resort</title>
 
     <!-- <link rel="manifest" href="site.webmanifest"> -->
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('website/img/favicon.png') }}">
     <!-- Place favicon.ico in the root directory -->
 
     <!-- CSS here -->
-    <link rel="stylesheet" href="{{ asset('website/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('bootstrap-4.3.1/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('website/css/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('website/css/magnific-popup.css') }}">
-    <link rel="stylesheet" href="{{ asset('website/css/font-awesome.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('website/css/font-awesome.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('website/css/themify-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('website/css/nice-select.css') }}">
     <link rel="stylesheet" href="{{ asset('website/css/flaticon.css') }}">
@@ -25,7 +26,17 @@
     <link rel="stylesheet" href="{{ asset('website/css/animate.css') }}">
     <link rel="stylesheet" href="{{ asset('website/css/slicknav.css') }}">
     <link rel="stylesheet" href="{{ asset('website/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('webfonts/fontawesome-pro-5.12.0-web/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('website/plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('website/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('website/plugins/sweetalert2/sweetalert2.min.css') }}">
     <!-- <link rel="stylesheet" href="css/responsive.css"> -->
+
+    {{-- Font --}}
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="{{ asset('font/fonts.googleapis.com-css-family=Nunito.css') }}">
+
+    @yield('style')
 </head>
 
 <body>
@@ -39,7 +50,7 @@
                             <div class="main-menu  d-none d-lg-block">
                                 <nav>
                                     <ul id="navigation">
-                                        <li><a class="active" href="{{ route('resort.index') }}">Home</a></li>
+                                        <li><a href="{{ route('resort.index') }}">Home</a></li>
                                         <li><a href="#">Rooms</a></li>
                                         <li><a href="#">About</a></li>
                                         {{-- <li><a href="#">blog <i class="ti-angle-down"></i></a>
@@ -87,7 +98,11 @@
                                     </ul>
                                 </div>
                                 <div class="book_btn d-none d-lg-block">
-                                    <a class="popup-with-form" href="#book-form">Book A Room</a>
+                                    @auth
+                                    @if (!is_null(Auth::user()->email_verified_at))
+                                    <a href="{{ route('client_bookings.index') }}">Book A Room</a>
+                                    @endif
+                                    @endauth
                                     @guest
                                     <a class="popup-with-form" href="#login-form">Login</a>
                                     @else
@@ -113,8 +128,63 @@
     {{-- content here --}}
     @yield("content")
 
+    <div id="modalAjax"></div>
+    <div id="modalOpenData"></div>
+    <div id="tableActionModal"></div>
+    <div class="d-none" id="oldInput">
+        @forelse (old() as $input => $value)
+            @if (is_array($value))
+                @foreach ($value as $arrayValue)
+                    <input type="text" name="old_{{ $input }}[]" value="{{ $arrayValue }}">
+                @endforeach
+            @else
+                <input type="text" name="old_{{ $input }}" value="{{ $value }}" data-error="{{ $errors->has($input) ? ' is-invalid' : '' }}" data-error-message="{{ $errors->first($input) }}">
+            @endif
+        @empty
+        @endforelse
+    </div>
+    @if (count($errors) > 0)
+        <div style="position: absolute; top: 0; right: 0; z-index: 1111">
+            <div class="toast" data-autohide="false" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    {{-- <img src="..." class="rounded mr-2" alt="..."> --}}
+                    <strong class="mr-auto text-danger">Whoops!</strong>
+                    {{-- <small class="text-muted">11 mins ago</small> --}}
+                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+                </div>
+                <div class="toast-body">
+                    {{-- There were some problems with your input. --}}
+                    <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <div class="modal fade" id="modalAjaxError" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="DoctorsNotes" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title text-danger"><i class="fad fa-exclamation-triangle"></i> Error</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {{-- <div id="ajaxOptions"></div> --}}
+                    <legend id="thrownError"></legend>
+                    <div id="xhr"></div>
+                </div>
+                <div class="modal-footer text-right">
+                    <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- book form --}}
-    <form id="book-form" class="white-popup-block mfp-hide form-contact" autocomplete="off">
+    {{-- <form id="book-form" class="white-popup-block mfp-hide form-contact" autocomplete="off">
         <div class="popup_box ">
             <div class="popup_inner">
                 <h3>Check Availability</h3>
@@ -128,23 +198,8 @@
                         </div>
                         <div class="col-xl-12">
                             <input class="form-control w-100" nanme="number_of_person" type="number" placeholder="Number of Person">
-                            {{-- <select class="form-select wide" id="default-select" class="">
-                                <option data-display="Adult">1</option>
-                                <option value="1">2</option>
-                                <option value="2">3</option>
-                                <option value="3">4</option>
-                            </select> --}}
                             <br>
                         </div>
-                        {{-- <div class="col-xl-6">
-                            <input class="form-control" type="number" placeholder="Children">
-                            <select class="form-select wide" id="default-select" class="">
-                                <option data-display="Children">1</option>
-                                <option value="1">2</option>
-                                <option value="2">3</option>
-                                <option value="3">4</option>
-                            </select>
-                        </div> --}}
                         <div class="col-xl-12">
                             <select class="form-select wide" id="default-select" name="room_type">
                                 @foreach($roomTypes as $id=>$name)
@@ -160,10 +215,10 @@
             </div>
         </div>
     </form>
-
+ --}}
     @guest
     {{-- Login form --}}
-    <form id="login-form" class="white-popup-block mfp-hide form-contact" autocomplete="off">
+    <form id="login-form" class="white-popup-block mfp-hide form-contact" autocomplete="on">
         <div class="popup_box ">
             <div class="popup_inner">
                 <h3>Login</h3>
@@ -224,7 +279,7 @@
         </div>
     </form>
 
-    <form class="white-popup-block mfp-hide form-contact" id="registration-form" method="POST" action="{{ route('register') }}" autocomplete="off">
+    <form class="white-popup-block mfp-hide form-contact" id="registration-form" method="POST" action="{{ route('register') }}">
         <div class="popup_box ">
             <div class="popup_inner">
                 <h3>Register</h3>
@@ -233,7 +288,7 @@
                 <div class="form-group row">
                     <div class="col-md-6">
                         <label for="first_name" class="col-md-4 col-form-label text-md-right">{{ __('First Name') }}</label>
-                        <input id="first_name" type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" value="{{ old('first_name') }}" required>
+                        <input id="first_name" type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" value="{{ old('first_name') }}" required autocomplete="first_name">
 
                         @error('first_name')
                             <span class="invalid-feedback" role="alert">
@@ -243,7 +298,7 @@
                     </div>
                     <div class="col-md-6">
                         <label for="last_name" class="col-md-4 col-form-label text-md-right">{{ __('Last Name') }}</label>
-                        <input id="last_name" type="text" class="form-control @error('last_name') is-invalid @enderror" name="last_name" value="{{ old('last_name') }}" required>
+                        <input id="last_name" type="text" class="form-control @error('last_name') is-invalid @enderror" name="last_name" value="{{ old('last_name') }}" required autocomplete="last_name">
                         @error('last_name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -254,7 +309,7 @@
                 <div class="form-group row">
                     <div class="col-md-6">
                         <label for="contact_number" class="col-md-4 col-form-label text-md-right">{{ __('Contact #') }}</label>
-                        <input id="contact_number" type="text" class="form-control @error('contact_number') is-invalid @enderror" name="contact_number" value="{{ old('contact_number') }}" required>
+                        <input id="contact_number" type="text" class="form-control @error('contact_number') is-invalid @enderror" name="contact_number" value="{{ old('contact_number') }}" required autocomplete="contact_number">
 
                         @error('first_name')
                             <span class="invalid-feedback" role="alert">
@@ -264,7 +319,7 @@
                     </div>
                     <div class="col-md-6">
                         <label for="address" class="col-md-4 col-form-label text-md-right">{{ __('Address') }}</label>
-                        <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" value="{{ old('address') }}" required>
+                        <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" value="{{ old('address') }}" required autocomplete="address">
                         @error('address')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -275,7 +330,7 @@
                 <div class="form-group row">
                     <label for="registerEmail" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
                     <div class="col-md-6">
-                        <input id="registerEmail" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete>
+                        <input id="registerEmail" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
                         @error('email')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -321,8 +376,10 @@
                 <div class="main-menu  d-none d-lg-block">
                     <nav>
                         <ul>
+                            @if (!is_null(Auth::user()->email_verified_at))
                             <li><a href="#">Bookings</a></li>
                             <li><a href="#">Account Settings</a></li>
+                            @endif
                             <li><a href="#logout" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">Logout</a></li>
                         </ul>
                     </nav>
@@ -422,13 +479,13 @@
 
     {{-- Scripts --}}
     <script src="{{ asset('website/js/vendor/modernizr-3.5.0.min.js') }}"></script>
-    <script src="{{ asset('website/js/vendor/jquery-1.12.4.min.js') }}"></script>
+    <script src="{{ asset('website/plugins/jquery-3.4.1.min.js') }}"></script>
     <script src="{{ asset('website/js/popper.min.js') }}"></script>
-    <script src="{{ asset('website/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bootstrap-4.3.1/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('website/js/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('website/js/isotope.pkgd.min.js') }}"></script>
     <script src="{{ asset('website/js/ajax-form.js') }}"></script>
-    <script src="{{ asset('website/js/waypoints.min.js') }}"></script>
+    {{-- <script src="{{ asset('website/js/waypoints.min.js') }}"></script> --}}
     <script src="{{ asset('website/js/jquery.counterup.min.js') }}"></script>
     <script src="{{ asset('website/js/imagesloaded.pkgd.min.js') }}"></script>
     <script src="{{ asset('website/js/scrollIt.js') }}"></script>
@@ -439,6 +496,41 @@
     <script src="{{ asset('website/js/jquery.magnific-popup.min.js') }}"></script>
     <script src="{{ asset('website/js/plugins.js') }}"></script>
     <script src="{{ asset('website/js/gijgo.min.js') }}"></script>
+
+    <script src="{{ asset('website/plugins/select2/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('website/plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
+    <script>
+        $(function() {
+            $.fn.select2.defaults.set('theme', 'bootstrap4');
+            $.fn.select2.defaults.set('placeholder', 'Select');
+
+            $('.select2').select2({
+                theme: "bootstrap4",
+                placeholder: "Select",
+            });
+            
+            $('.select2-allow-clear').select2({
+                theme: "bootstrap4",
+                placeholder: "Select",
+                allowClear: true
+            });
+    
+            $('.select2-no-search').select2({
+                theme: "bootstrap4",
+                placeholder: "Select",
+                allowClear: true,
+                minimumResultsForSearch: Infinity
+            });
+    
+            $('.select2-tag').select2({
+                theme: "bootstrap4",
+                placeholder: "Select",
+                allowClear: true,
+                tags: true,
+            });
+            
+        });
+    </script>
 
     <!--contact js-->
     <script src="{{ asset('website/js/contact.js') }}"></script>
@@ -466,6 +558,9 @@
 
     @auth
     <form id="logoutform" action="{{ route('logout') }}" method="POST" style="display: none;">
+        {{ csrf_field() }}
+    </form>
+    <form id="verificationEmail" action="{{ url('/email/verification-notification') }}" method="POST" style="display: none;">
         {{ csrf_field() }}
     </form>
     @endauth
@@ -500,7 +595,206 @@
                 });
             });
         })
-     </script>
+    </script>
+
+    {{-- My Scripts --}}
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        
+        // $(function(){
+            $(".tr-link").click(function() {
+                window.location = $(this).data("href");
+            });
+            $(document).on('click', 'tr[data-toggle="tr-link"]', function(){
+                window.location = $(this).data("href");
+            })
+            
+            // Permission Denied
+            function ajax_error(xhr, ajaxOptions, thrownError){
+                // console.log(xhr.responseJSON)
+                if(xhr.responseJSON.exception == "Spatie\\Permission\\Exceptions\\UnauthorizedException"){
+                    ajax_permission_denied();
+                }else{
+                    $('#ajaxOptions').html(ajaxOptions);
+                    $('#thrownError').html(thrownError);
+                    $('#xhr').html(xhr.responseJSON.message);
+                    $('#modalAjaxError').modal('show');
+                }
+                /*Swal.fire({
+                    // position: 'top-end',
+                    type: 'error',
+                    title: ajaxOptions+":\n"+thrownError+".\n"+xhr.responseJSON.message,
+                    // showConfirmButton: false,
+                    // timer: 3000,
+                    // toast: true
+                })*/
+            }
+
+            function ajax_permission_denied(){
+                Swal.fire({
+                    // position: 'top-end',
+                    type: 'error',
+                    title: "Access Denied",
+                    text: "User does not have the right permissions.",
+                    // showConfirmButton: false,
+                    // timer: 3000,
+                    // toast: true
+                })
+            }
+
+            function removeLocationHash(){
+                var noHashURL = window.location.href.replace(/#.*$/, '');
+                window.history.replaceState('', document.title, noHashURL)
+            }
+
+            // Modal Ajax
+            $(document).on('click', '[data-toggle="modal-ajax"]', function(){
+                $('#loader').show();
+                var href = $(this).data('href');
+                var target = $(this).data('target');
+                var data = {};
+                if($(this).data('form') != null){
+                    var form = $(this).data('form').split(';');
+                    for (var i = 0; i < form.length; i++) {
+                        var form_data = form[i].split(':');
+                        for(var j = 1; j < form_data.length; j++){
+                            data[form_data[j-1]] = form_data[j];
+                        }
+                    }
+                }
+                $.ajax({
+                    type: 'GET',
+                    url: href,
+                    data: data,
+                    success: function(data){
+                        $('.modal-backdrop').remove()
+                        $('#modalAjax').html(data.modal_content)
+                        $('.select2').select2({
+                            theme: "bootstrap4",
+                            placeholder: "Select",
+                            allowClear: true
+                        });
+                        $('.datetimepicker').datetimepicker();
+                        $('#oldInput').find('input').each(function(){
+                            var name = $(this).attr('name').replace('old_', '');
+                            if(name != '_token'){
+                                var value = $(this).val();
+                                $('#modalAjax [name="'+name+'"]').parent('.form-group').find('.invalid-feedback').html('<strong class="text-danger">'+$(this).data('error-message')+'</strong>')
+                                $('#modalAjax').find('input[type="text"][name="'+name+'"]').val(value).addClass($(this).data('error'));
+                                $('#modalAjax').find('input[type="checkbox"][name="'+name+'"][value="'+value+'"]').prop('checked', true);
+                                $('#modalAjax').find('input[type="radio"][name="'+name+'"][value="'+value+'"]').prop('checked', true);
+                                $('#modalAjax').find('select[name="'+name+'"]').val(value).trigger('change').addClass($(this).data('error'));
+                            }
+                        })
+                        $(target).modal('show')
+                        $('#loader').hide();
+                    },
+                    error: function(xhr, ajaxOptions, thrownError){
+                        ajax_error(xhr, ajaxOptions, thrownError)
+                        // removeLocationHash()
+                        $('#loader').hide();
+                    }
+                })
+            })
+
+            $(document).on('click', '[data-dismiss="modal-ajax"]', function() {
+                // closeAllModals()
+                $('.modal').modal('hide')
+                $('.modal-backdrop').fadeOut(250, function() {
+                    $('.modal-backdrop').remove()
+                })
+                $('body').removeClass('modal-open').css('padding-right', '0px');
+                $('#oldInput').html('');
+                $('#modalAjax').html('')
+                removeLocationHash()
+            })
+
+            // form validation info
+            $('.toast').toast('show')
+        // })
+    </script>
+
+     {{--  Action Alert --}}
+    <script type="application/javascript">
+        @if($message = Session::get('alert-success'))
+            Swal.fire({
+                // position: 'top-end',
+                type: 'success',
+                title: '{{ $message }}',
+                showConfirmButton: false,
+                timer: 2000,
+                toast: true
+            })
+        @elseif($message = Session::get('alert-warning'))
+            Swal.fire({
+                // position: 'top-end',
+                type: 'warning',
+                title: '{{ $message }}',
+                showConfirmButton: false,
+                timer: 2000,
+                toast: true
+            })
+        @elseif($message = Session::get('alert-danger'))
+            Swal.fire({
+                // position: 'top-end',
+                type: 'success',
+                title: '{{ $message }}',
+                showConfirmButton: false,
+                timer: 2000,
+                toast: true
+            })
+        @endif
+
+        // Close action alert
+        $(document).ready(function() {
+            // show the alert
+            setTimeout(function() {
+                $(".action-alert").alert('close');
+            }, 2000);
+        });
+
+        function ajaxActionAlert(type, message) {
+            switch (type) {
+                case 'success':
+                    Swal.fire({
+                        // position: 'top-end',
+                        type: 'success',
+                        title: message,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        toast: true
+                    })
+                    break;
+                case 'warning':
+                    Swal.fire({
+                        // position: 'top-end',
+                        type: 'warning',
+                        title: message,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        toast: true
+                    })
+                    break;
+                case 'danger':
+                    Swal.fire({
+                        // position: 'top-end',
+                        type: 'danger',
+                        title: message,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        toast: true
+                    })
+                    break;
+                default:
+                    break;
+            }
+
+        }
+    </script>
     @yield('scripts')
 </body>
 </html>
