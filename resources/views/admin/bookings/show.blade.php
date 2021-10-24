@@ -15,7 +15,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-6">
-                <legend>Booking Info</legend>
+            <legend>Booking Info</legend>
                 <div class="form-group">
                     <label>Booking Status:</label>
                     {!! $booking->getBookingStatus() !!}
@@ -61,6 +61,10 @@
                     <label>Balance:</label>
                     ₱ {{ number_format(($booking->amount-$booking->payments->sum('amount')), 2) }}
                 </div>
+                <div class="form-group">
+                    <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#bookingPayment" data-href="{{ route('payments.create', ['payment_method'=>'cash', 'booking_id'=>$booking->id]) }}" class="btn btn-primary">Add Payment</a>
+                </div>
+                <br>
                 <table class="table table-sm table-bordered table-hover">
                     <thead>
                         <tr>

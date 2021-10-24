@@ -12,6 +12,7 @@ class Payment extends Model
         'proof_of_payment',
         'booking_id',
         'payment_status',
+        'mode_of_payment',
         'amount'
     ];
 

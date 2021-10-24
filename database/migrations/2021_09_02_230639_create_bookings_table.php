@@ -24,7 +24,7 @@ class CreateBookingsTable extends Migration
             $table->timestamp('booking_date_to')->nullable();
             $table->integer('amount')->default(0)->nullable();
             $table->enum('payment_status', ['unpaid', 'partial', 'paid']);
-            $table->enum('booking_status', ['pending', 'confirmed', 'checked in', 'canceled', 'expired']);
+            $table->enum('booking_status', ['pending', 'confirmed', 'checked in', 'checked out', 'canceled', 'expired']);
             $table->timestamps();
             $table->softDeletes();
         });

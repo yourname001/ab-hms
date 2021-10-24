@@ -17,6 +17,7 @@ class CreatePaymentsTable extends Migration
             $table->bigIncrements('id');
             $table->string('proof_of_payment')->nullable();
             $table->enum('payment_status', ['pending', 'confirmed', 'denied']);
+            $table->enum('mode_of_payment', ['gcash', 'cash']);
             $table->unsignedBigInteger('booking_id');
             $table->foreign('booking_id')
                 ->references('id')->on('bookings')

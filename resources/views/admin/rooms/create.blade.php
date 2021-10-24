@@ -75,7 +75,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group form-check">
-                        <input type="checkbox" class="form-check-input" id="featured" value="1" @if(old('featured')) checked @endif>
+                        <input type="checkbox" class="form-check-input" id="featured" name="featured" value="1" @if(old('featured')) checked @endif>
                         <label class="form-check-label" for="featured">Featured</label>
                     </div>
                 </div>

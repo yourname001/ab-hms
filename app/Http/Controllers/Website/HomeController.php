@@ -18,7 +18,7 @@ class HomeController extends Controller
     public function index()
     {
         $data = ([
-            'featuredRooms' => Room::where('featured', '1')->get(),
+            'featuredRooms' => Room::where('featured', '1')->whereNotNull('image')->get(),
             'roomTypes' => RoomType::pluck('name', 'id')
         ]);
         return view('website.index', $data);

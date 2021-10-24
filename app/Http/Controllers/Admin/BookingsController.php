@@ -8,11 +8,14 @@ use App\Http\Requests\MassDestroyBookingRequest;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Room;
+use App\Models\RoomType;
+use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class BookingsController extends Controller
 {
@@ -82,16 +85,53 @@ class BookingsController extends Controller
 
     public function create()
     {
-        abort_if(Gate::denies('booking_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        // abort_if(Gate::denies('booking_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $rooms = Room::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        // $rooms = Room::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $clients = User::join('role_user', 'users.id', '=', 'role_user.user_id')
+                        ->select('*')
+                        ->where('role_id', 3)->get();
+        $data = [
+            'rooms' => Room::get(),  
+            'room_types' => RoomType::get(),  
+            'clients' => $clients,
+        ];
 
-        return view('admin.bookings.create', compact('rooms'));
+        return view('admin.bookings.create', $data);
     }
 
-    public function store(StoreBookingRequest $request)
+    public function store(Request $request)
     {
-        // $booking = Booking::create($request->all());
+        $request->validate([
+            'book_date' => 'required',
+            'room_type' => 'required',
+            'room' => 'required'
+        ]);
+
+        $room = Room::find($request->get('room'));
+        $amount = $room->amount;
+
+        $book_date = explode(' - ',$request->get('book_date'));
+        $book_from = Carbon::parse($book_date[0]);
+        $book_to = Carbon::parse($book_date[1]);
+
+        $date_from = Carbon::createFromDate($book_from);
+        $days = $date_from->diffInDays($book_to);
+
+        $amount = $amount * $days;
+
+        $booking = Booking::create([
+            'payment_status' => 'unpaid', 
+            'booking_status' => 'pending',
+            'room_id' => $request->get('room'),
+            'user_id' => $request->get('client'),
+            'amount' => $amount,
+            'booking_date_from' => $book_date[0],
+            'booking_date_to' => $book_date[1],
+        ]);
+        
+        return redirect()->route('admin.bookings.index');
+        /* // $booking = Booking::create($request->all());
         $room = Room::find($request->get('room_id'));
         $booking = Booking::create([
             'room_id' => $request->get('room_id'),
@@ -103,7 +143,7 @@ class BookingsController extends Controller
             'amount' => $room->amount
         ]);
 
-        return redirect()->route('admin.bookings.index');
+        return redirect()->route('admin.bookings.index'); */
     }
 
     public function edit(Booking $booking)

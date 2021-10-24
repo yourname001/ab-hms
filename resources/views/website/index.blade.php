@@ -285,7 +285,7 @@
 <!-- about_area_end -->
 
 <!-- features_room_startt -->
-@if($featuredRooms->count() > 1)
+{{-- @if($featuredRooms->count() > 0)
 <div class="features_room">
     <div class="container">
         <div class="row">
@@ -297,60 +297,24 @@
             </div>
         </div>
     </div>
-    @foreach ($featuredRoom as $room)
+    @foreach ($featuredRooms as $room)
     <div class="rooms_here">
         <div class="single_rooms">
             <div class="room_thumb">
-                <img src="{{ asset('website/img/rooms/1.png') }}" alt="">
+                <img src="{{ asset('images/rooms/'.$room->image) }}" alt="">
                 <div class="room_heading d-flex justify-content-between align-items-center">
                     <div class="room_heading_inner">
                         <span>From ₱{{ $room->amount }}/night</span>
-                        <h3>{{ $room->roomType->name }}</h3>
+                        <h3>{{ $room->room_type->name }}</h3>
                     </div>
                     <a href="#" class="line-button">book now</a>
                 </div>
             </div>
         </div>
-        {{-- <div class="single_rooms">
-            <div class="room_thumb">
-                <img src="{{ asset('website/img/rooms/2.png') }}" alt="">
-                <div class="room_heading d-flex justify-content-between align-items-center">
-                    <div class="room_heading_inner">
-                        <span>From ₱250/night</span>
-                        <h3>Deluxe Room</h3>
-                    </div>
-                    <a href="#" class="line-button">book now</a>
-                </div>
-            </div>
-        </div>
-        <div class="single_rooms">
-            <div class="room_thumb">
-                <img src="{{ asset('website/img/rooms/3.png') }}" alt="">
-                <div class="room_heading d-flex justify-content-between align-items-center">
-                    <div class="room_heading_inner">
-                        <span>From ₱250/night</span>
-                        <h3>Signature Room</h3>
-                    </div>
-                    <a href="#" class="line-button">book now</a>
-                </div>
-            </div>
-        </div>
-        <div class="single_rooms">
-            <div class="room_thumb">
-                <img src="{{ asset('website/img/rooms/4.png') }}" alt="">
-                <div class="room_heading d-flex justify-content-between align-items-center">
-                    <div class="room_heading_inner">
-                        <span>From ₱250/night</span>
-                        <h3>Couple Room</h3>
-                    </div>
-                    <a href="#" class="line-button">book now</a>
-                </div>
-            </div>
-        </div> --}}
         @endforeach
     </div>
 </div>
-@endif
+@endif --}}
 <!-- features_room_end -->
 
 <!-- forQuery_start -->

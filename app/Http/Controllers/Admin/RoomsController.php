@@ -88,21 +88,20 @@ class RoomsController extends Controller
 			'capacity' => 'required',
 			'amount' => 'required'
         ]);
+
+        $room = Room::create([
+            'featured' => is_null($request->get('featured')) ? 0 : 1,
+            'amount' => is_null($request->get('amount')) ? 0 : $request->get('amount'),
+            'room_type_id' => $request->get('room_type_id'),
+            'name' => $request->get('name'),
+            'capacity' => $request->get('capacity'),
+            'description' => $request->get('description'),
+        ]);
         
         if($request->file('image')){
-            
-
             $file = $request->file('image');
             $fileName = $request->get('name') . '_' . date('m-d-Y H.i.s') . '.' . $file->getClientOriginalExtension();
             Storage::disk('upload')->putFileAs('images/rooms', $request->file('image'), $fileName);
-            $room = Room::create([
-                'featured' => is_null($request->get('featured')) ? 0 : 1,
-                'amount' => is_null($request->get('amount')) ? 0 : $request->get('amount'),
-                'room_type_id' => $request->get('room_type_id'),
-                'name' => $request->get('name'),
-                'capacity' => $request->get('capacity'),
-                'description' => $request->get('description'),
-            ]);
             $room->update([
                 'image' => $fileName
             ]);
@@ -113,22 +112,57 @@ class RoomsController extends Controller
 
     public function edit(Room $room)
     {
-        abort_if(Gate::denies('room_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        // abort_if(Gate::denies('room_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $hotels = Hotel::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        // $hotels = Hotel::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        // $room_types = RoomType::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        // $room->load('hotel', 'room_type');
+
+        // return view('admin.rooms.edit', compact('room_types', 'room'));.
+        abort_if(Gate::denies('room_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $room_types = RoomType::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $data = [
+            'room_types' => $room_types,
+            'room' => $room
+        ];
 
-        $room->load('hotel', 'room_type');
-
-        return view('admin.rooms.edit', compact('room_types', 'room'));
+        return view('admin.rooms.edit', $data);
     }
 
-    public function update(UpdateRoomRequest $request, Room $room)
+    public function update(Request $request, Room $room)
     {
-        $room->update($request->all());
+        $request->validate([
+			'room_type_id' => 'required',
+			'name' => 'required',
+			'capacity' => 'required',
+			'amount' => 'required'
+        ]);
 
+        $room->update([
+            'featured' => is_null($request->get('featured')) ? 0 : 1,
+            'amount' => is_null($request->get('amount')) ? 0 : $request->get('amount'),
+            'room_type_id' => $request->get('room_type_id'),
+            'name' => $request->get('name'),
+            'capacity' => $request->get('capacity'),
+            'description' => $request->get('description'),
+        ]);
+        
+        if($request->file('image')){
+            $file = $request->file('image');
+            $fileName = $request->get('name') . '_' . date('m-d-Y H.i.s') . '.' . $file->getClientOriginalExtension();
+            Storage::disk('upload')->putFileAs('images/rooms', $request->file('image'), $fileName);
+            $room->update([
+                'image' => $fileName
+            ]);
+        }
+        
         return redirect()->route('admin.rooms.index');
+        /* $room->update($request->all());
+
+        return redirect()->route('admin.rooms.index'); */
     }
 
     public function show(Room $room)
@@ -180,6 +214,15 @@ class RoomsController extends Controller
             'book_from' => $book_from,
             'book_to' => $book_to,
             'bookings' => $bookings,
+        ]);
+    }
+
+    public function get_room_info(Room $room)
+    {
+        // $room = Room::find($request->get('room_id'));
+        return response()->json([
+            'room' => $room,
+            'room_image' => asset('images/rooms/'. $room->image),
         ]);
     }
 }

@@ -15,11 +15,15 @@
     <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/select/1.3.0/css/select.dataTables.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" rel="stylesheet" />
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" rel="stylesheet" /> --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
     <link href="https://unpkg.com/@coreui/coreui@2.1.16/dist/css/coreui.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="{{ asset('website/plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('website/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet" />
     <style>
         label {
@@ -113,6 +117,42 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
     <script src="{{ asset('js/main.js') }}"></script>
+
+    <script src="{{ asset('website/plugins/select2/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('website/plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
+    <script>
+        $(function() {
+            $.fn.select2.defaults.set('theme', 'bootstrap4');
+            $.fn.select2.defaults.set('placeholder', 'Select');
+
+            $('.select2').select2({
+                theme: "bootstrap4",
+                placeholder: "Select",
+            });
+            
+            $('.select2-allow-clear').select2({
+                theme: "bootstrap4",
+                placeholder: "Select",
+                allowClear: true
+            });
+    
+            $('.select2-no-search').select2({
+                theme: "bootstrap4",
+                placeholder: "Select",
+                allowClear: true,
+                minimumResultsForSearch: Infinity
+            });
+    
+            $('.select2-tag').select2({
+                theme: "bootstrap4",
+                placeholder: "Select",
+                allowClear: true,
+                tags: true,
+            });
+            
+        });
+    </script>
+
     <script>
     $(function() {
 		let copyButtonTrans = '{{ trans('global.datatables.copy') }}'

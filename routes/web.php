@@ -54,13 +54,18 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Rooms
     Route::delete('rooms/destroy', 'RoomsController@massDestroy')->name('rooms.massDestroy');
     Route::resource('rooms', 'RoomsController');
+    // Route::get('get_room_info/', 'Admin\RoomController@getRoomInfo')->name('rooms.get_room_info');
+    
 
     // Bookings
     Route::delete('bookings/destroy', 'BookingsController@massDestroy')->name('bookings.massDestroy');
     Route::resource('bookings', 'BookingsController');
     Route::get('bookings/confirm/{booking}', 'BookingsController@confirm')->name('bookings.confirm');
     Route::get('bookings/check-in/{booking}', 'BookingsController@checkIn')->name('bookings.check_in');
-    Route::get('bookings/cancel/{booking}', 'BookingsController@clientCheckedIn')->name('bookings.cancel');
+    Route::get('bookings/cancel/{booking}', 'BookingsController@cancel')->name('bookings.cancel');
+
+    // payments
+    // Route::get('admin/payments/create', 'Admin\BookingsController@createPayment')->name('admin.payments.create');
 });
 
 // Client
@@ -75,7 +80,11 @@ Route::group(array('middleware'=>['auth']), function() {
     Route::resource('client_bookings', 'Website\BookingController')->parameters([
 		'client_bookings' => 'booking'
     ]);
+
+    Route::get('get_room_info/{room}', 'Admin\RoomsController@get_room_info');
+
     Route::get('client_cooking/payments/{booking}', 'Website\BookingController@payments')->name('client_bookings.payments');
+
     Route::post('filter_rooms', 'Admin\RoomsController@filter_rooms');
     Route::resource('payments', 'Website\PaymentController');
 });

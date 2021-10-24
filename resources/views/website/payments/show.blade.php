@@ -13,11 +13,21 @@
                     <label>Date Confirmed:</label>
                     {{ date('F d, Y h:i A', strtotime($payment_show->updated_at)) }}
                 </div>
-                <hr>
+                <div class="form-group">
+                    <label>Amount:</label>
+                    ₱ {{ number_format($payment_show->amount, 2) }}
+                </div>
+                <div class="form-group">
+                    <label>Mode of payment:</label>
+                    {{ $payment_show->mode_of_payment }}
+                </div>
                 @endif
+                @if($payment_show->mode_of_payment == 'gcash')
+                <hr>
                 <div class="form-group text-center">
                     <img src="{{ asset('images/proof-of-payments/'.$payment_show->proof_of_payment) }}" class="img-thumbnail">
                 </div>
+                @endif
             </div>
         </div>
     </div>

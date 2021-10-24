@@ -32,6 +32,7 @@ class PaymentController extends Controller
             $data = [
                 'payment_method' => request()->get('payment_method'),
                 'booking' => Booking::find(request()->get('booking_id')),
+                // 'pay_with_cash' => request()->get('pay_with_cash')
             ];
             return response()->json([
                 'modal_content' => view('website.payments.create', $data)->render()
@@ -49,24 +50,51 @@ class PaymentController extends Controller
     {
         $request->validate([
 			'booking_id' => 'required',
-			'proof_of_payment' => 'required',
+			'payment_method' => 'required',
+			// 'proof_of_payment' => 'required',
         ]);
-        if($request->file('proof_of_payment') && Booking::where('id', $request->get('booking_id'))){
+        if(Booking::where('id', $request->get('booking_id'))){
             $booking = Booking::find($request->get('booking_id'));
-            $file = $request->file('proof_of_payment');
-            $fileName = 'Booking-Payment['.$request->get('name') . '][' . $request->get('payment_method') . '] ' . date('F d,Y h-i-A') . '.' . $file->getClientOriginalExtension();
-            Storage::disk('upload')->putFileAs('images/proof-of-payments', $file, $fileName);
-            $payment = Payment::create([
-                'booking_id' => $booking->id,
-                'payment_status' => 'pending',
-                'amount' => 0,
-            ]);
-            $payment->update([
-                'proof_of_payment' => $fileName
-            ]);
-        }
 
-        return redirect()->route('client_bookings.index');
+            if($request->get('payment_method') == 'cash'){
+                $amount = $request->get('amount');
+            
+                $payment = Payment::create([
+                    'booking_id' => $booking->id,
+                    'payment_status' => 'confirmed',
+                    'mode_of_payment' => 'cash',
+                    'amount' => $request->get('amount'),
+                ]);
+
+                $payment_status = 'paid';
+                if($amount < $payment->booking->amount){
+                    $payment_status = 'partial';
+                }
+                $payment->booking->update([
+                    'payment_status' => $payment_status
+                ]);
+
+                return redirect()->route('admin.bookings.index');
+
+            }elseif($request->get('payment_method') == 'gcash'){
+                $payment = Payment::create([
+                    'booking_id' => $booking->id,
+                    'payment_status' => 'pending',
+                    'mode_of_payment' => 'gcash',
+                    'amount' => 0,
+                ]);
+                if($request->file('proof_of_payment')){
+                    $file = $request->file('proof_of_payment');
+                    $fileName = 'Booking-Payment['.$request->get('name') . '][' . $request->get('payment_method') . '] ' . date('F d,Y h-i-A') . '.' . $file->getClientOriginalExtension();
+                    Storage::disk('upload')->putFileAs('images/proof-of-payments', $file, $fileName);
+                    $payment->update([
+                        'proof_of_payment' => $fileName
+                    ]);
+                }
+            }
+
+        }
+        
     }
 
     /**

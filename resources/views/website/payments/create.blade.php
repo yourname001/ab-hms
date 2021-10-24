@@ -14,41 +14,30 @@
                     <label>Amount: ₱ {{ number_format($booking->amount, 2) }}</label>
                     <br>
                     <label>Balance: ₱ {{ number_format(($booking->amount-$booking->payments->sum('amount')), 2) }}</label>
-                    @if($payment_method == 'gcash')
-                    <input type="hidden" name="payment_method" value="gcash">
-                    <div class="form-group text-center">
-                        <strong>Scan the qrcode below.</strong>
-                        <br>
-                        <br>
-                        <img src="{{ asset('images/qrcode.jpg') }}" alt="" class="img-thumbnail" style="border: none; background-color: transparent" width="250px">
-                        <br>
-                        <br>
+                    @if($payment_method == "gcash")
+                        <input type="hidden" name="payment_method" value="gcash">
+                        <div class="form-group text-center">
+                            <strong>Scan the qrcode below.</strong>
+                            <br>
+                            <br>
+                            <img src="{{ asset('images/qrcode.jpg') }}" alt="" class="img-thumbnail" style="border: none; background-color: transparent" width="250px">
+                            <br>
+                            <br>
+                        </div>
+                        <div class="form-group">
+                            <strong>Take a screenshot of your payment and upload the image using the button below.</strong>
+                            <br>
+                            <label class="btn btn-primary btn-sm">
+                                Upload image here&hellip;<input value="" type="file" name="proof_of_payment" style="display: none;" accept="image/*" required/>
+                            </label>
+                        </div>
+                    @elseif($payment_method == "cash")
+                    <input type="hidden" name="payment_method" value="cash">
+                    <div class="form-group">
+                        <label for="amount">Amount:</label>
+                        <input type="number" class="form-control" name="amount">
                     </div>
                     @endif
-                    <div class="form-group">
-                        <strong>Take a screenshot of your payment and upload the image using the button below.</strong>
-                        <br>
-                        <label class="btn btn-primary btn-sm">
-                            Upload image here&hellip;<input value="" type="file" name="proof_of_payment" style="display: none;" accept="image/*" required/>
-                        </label>
-                        {{-- <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addImage">Upload Image</button>
-                        <div class="modal fade" id="addImage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-sm">
-                                <div class="modal-content">
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <img id="img" width="100%" class="img-thumbnail" style="border: none; background-color: transparent" src="{{ asset('images/image-icon.png') }}" />
-                                            <label class="btn btn-primary btn-block">
-                                                Browse&hellip;<input value="" type="file" name="image" style="display: none;" id="upload" accept="image/*" />
-                                            </label>
-                                        </div>
-                                        <hr>
-                                        <button type="button" class="btn btn-primary close-modal" data-dismiss="#addImage" aria-hidden="true">Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> --}}
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal-ajax">Cancel</button>
