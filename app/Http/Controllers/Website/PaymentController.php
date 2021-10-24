@@ -124,7 +124,7 @@ class PaymentController extends Controller
             ]);
             $amount = $request->get('amount_confirmed');
             $payment->update([
-                'payment_status' => 3,
+                'payment_status' => $request->get('remarks'),
                 'amount' => $amount,
             ]);
             $payment_status = 'paid';

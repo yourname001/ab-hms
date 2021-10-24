@@ -155,7 +155,7 @@ class BookingsController extends Controller
             'booking_status' => 'confirmed'
         ]);
 
-        return redirect()->route('admin.bookings.show', $booking->booking_id);
+        return redirect()->route('admin.bookings.show', $booking->id);
     }
 
     public function checkIn(Booking $booking)
@@ -164,7 +164,7 @@ class BookingsController extends Controller
             'booking_status' => 'checked in'
         ]);
 
-        return redirect()->route('admin.bookings.show', $booking->booking_id);
+        return redirect()->route('admin.bookings.show', $booking->id);
     }
 
     public function cancel(Booking $booking)
@@ -173,7 +173,7 @@ class BookingsController extends Controller
             'booking_status' => 'canceled'
         ]);
 
-        return redirect()->route('admin.bookings.show', $booking->booking_id);
+        return redirect()->route('admin.bookings.show', $booking->id);
     }
     
 }
