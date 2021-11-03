@@ -11,6 +11,7 @@ Route::get('/home', function () {
     return redirect()->route('resort.index');
 });
 
+
 /* Resend Verification Email */
 
 
@@ -26,7 +27,7 @@ Route::get('/resort', function () {
 })->middleware('verified');
 
 // Auth::routes(['register' => false]);
-Auth::routes(['verify' => true]);
+Auth::routes(['verify' => true, 'register' => false]);
 // Admin
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
@@ -76,6 +77,10 @@ Route::get('/', function () {
 Route::resource('resort', 'Website\HomeController')->parameters([
     'resort' => 'homes'
 ]);
+Route::get('resort_login', 'Website\HomeController@login')->name('client.login');
+Route::get('resort_register', 'Website\HomeController@register')->name('client.register');
+Route::post('client_register', 'Website\HomeController@clientRegister')->name('client.client_register');
+
 Route::group(array('middleware'=>['auth']), function() {
     Route::resource('client_bookings', 'Website\BookingController')->parameters([
 		'client_bookings' => 'booking'

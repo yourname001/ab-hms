@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
             UsersTableSeeder::class,
             RoleUserTableSeeder::class,
             RoomTypesTableSeeder::class,
-            // RoomsTableSeeder::class
+            RoomsTableSeeder::class
         ]);
     }
 }

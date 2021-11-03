@@ -51,7 +51,7 @@ class RoomsController extends Controller
                 return $row->name ? $row->name : "";
             });
             $table->addColumn('amount', function ($row) {
-                return $row->amount ? $row->amount : '';
+                return $row->amount ? "₱".$row->amount : '';
             });
             $table->addColumn('capacity', function ($row) {
                 return $row->capacity ? $row->capacity : '';

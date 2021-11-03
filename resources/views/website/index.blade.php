@@ -1,389 +1,111 @@
 @extends('layouts.website')
 @section('content')
-<!-- slider_area_start -->
-<div class="slider_area">
-    <div class="slider_active owl-carousel">
-        @auth
-        @if(is_null(Auth::user()->email_verified_at))
-        <div class="single_slider d-flex align-items-center justify-content-center slider_bg_1">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="slider_text text-center">
-                            @if (session('message'))
-                                <div class="alert alert-success">
-                                    <h4>{{ session('message') }}</h4>
-                                </div>
-                            @else
-                                <div class="alert alert-warning">
-                                    <h4>Email not Verified</h4>
-                                    <h5>You must verify your email first. If your email verification is expired, click <a class="link-button-sm" href="javascript:void(0)" onclick="event.preventDefault(); document.getElementById('verificationEmail').submit();">here</a></h5>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
+
+<section class="home-slider owl-carousel">
+    <div class="slider-item" style="background-image:url({{ asset('images/banner/banner-1.jpg') }});">
+        <div class="overlay"></div>
+        <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+        <div class="col-md-12 ftco-animate text-center">
+            <div class="text mb-5 pb-3">
+                <h1 class="mb-3">Qatara Family Resort</h1>
+                <h2>Hotels &amp; Resorts</h2>
             </div>
         </div>
-        @else
-        <div class="single_slider d-flex align-items-center justify-content-center slider_bg_1">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="slider_text text-center">
-                            <h3>Qatara Family Resort</h3>
-                            {{-- <p>Unlock to enjoy the view of Martine</p> --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
-        <div class="single_slider  d-flex align-items-center justify-content-center slider_bg_2">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="slider_text text-center">
-                            {{-- <h3>Life is Beautiful</h3> --}}
-                            {{-- <p>Unlock to enjoy the view of Martine</p> --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
-        <div class="single_slider  d-flex align-items-center justify-content-center slider_bg_3">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="slider_text text-center">
-                            {{-- <h3>Life is Beautiful</h3> --}}
-                            {{-- <p>Unlock to enjoy the view of Martine</p> --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="single_slider  d-flex align-items-center justify-content-center slider_bg_4">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="slider_text text-center">
-                            {{-- <h3>Life is Beautiful</h3> --}}
-                            {{-- <p>Unlock to enjoy the view of Martine</p> --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endif
-        @endauth
-        @guest
-        <div class="single_slider d-flex align-items-center justify-content-center slider_bg_1">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="slider_text text-center">
-                            <h3>Qatara Family Resort</h3>
-                            {{-- <p>Unlock to enjoy the view of Martine</p> --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="single_slider  d-flex align-items-center justify-content-center slider_bg_2">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="slider_text text-center">
-                            {{-- <h3>Life is Beautiful</h3> --}}
-                            {{-- <p>Unlock to enjoy the view of Martine</p> --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="single_slider  d-flex align-items-center justify-content-center slider_bg_3">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="slider_text text-center">
-                            {{-- <h3>Life is Beautiful</h3> --}}
-                            {{-- <p>Unlock to enjoy the view of Martine</p> --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="single_slider  d-flex align-items-center justify-content-center slider_bg_4">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="slider_text text-center">
-                            {{-- <h3>Life is Beautiful</h3> --}}
-                            {{-- <p>Unlock to enjoy the view of Martine</p> --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endguest
     </div>
-</div>
-{{-- <div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col text-center">
-            <div class="card">
-                <div class="card-body">
-                    <p>
-                        
-                    </p>
-                    Resend Veryfication Email</a>
+
+    <div class="slider-item" style="background-image:url({{ asset('images/banner/banner-2.jpg') }});">
+        <div class="overlay"></div>
+        <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+        <div class="col-md-12 ftco-animate text-center">
+            <div class="text mb-5 pb-3">
+                <h1 class="mb-3">Pearl of Qatara Alaminos</h1>
+                <h2>Join With Us</h2>
+            </div>
+        </div>
+        </div>
+        </div>
+    </div>
+</section>
+@auth
+@if(is_null(Auth::user()->email_verified_at))
+<section class="ftco-section mt-5 ftc-no-pb ftc-no-pt">
+    <div class="container" id="verify-email">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-warning">
+                    <h4>Email not Verified</h4>
+                    <h5>You must verify your email first. If the email verification is expired, click <a class="btn btn-primary btn-sm" href="javascript:void(0)" onclick="event.preventDefault(); document.getElementById('verificationEmail').submit();">here</a></h5>
                 </div>
             </div>
         </div>
     </div>
-</div> --}}
-
-<!-- slider_area_end -->
-
-<!-- about_area_start -->
-{{-- <div class="about_area">
+</section>
+@endif
+@endauth
+<section class="ftco-section ftc-no-pb ftc-no-pt">
     <div class="container">
         <div class="row">
-            <div class="col-xl-5 col-lg-5">
-                <div class="about_info">
-                    <div class="section_title mb-20px">
-                        <span>About Us</span>
-                        <h3>A Luxuries Hotel <br>
-                            with Nature</h3>
-                    </div>
-                    <p>Suscipit libero pretium nullam potenti. Interdum, blandit phasellus consectetuer dolor ornare
-                        dapibus enim ut tincidunt rhoncus tellus sollicitudin pede nam maecenas, dolor sem. Neque
-                        sollicitudin enim. Dapibus lorem feugiat facilisi faucibus et. Rhoncus.</p>
-                    <a href="#" class="line-button">Learn More</a>
-                </div>
-            </div>
-            <div class="col-xl-7 col-lg-7">
-                <div class="about_thumb d-flex">
-                    <div class="img_1">
-                        <img src="{{ asset('website/img/about/about_1.png') }}" alt="">
-                    </div>
-                    <div class="img_2">
-                        <img src="{{ asset('website/img/about/about_2.png') }}" alt="">
+            {{-- <div class="col-md-5 p-md-5 img img-2 d-flex justify-content-center align-items-center" style="background-image: url(images/bg_2.jpg);">
+                <a href="https://vimeo.com/45830194" class="icon popup-vimeo d-flex justify-content-center align-items-center">
+                    <span class="icon-play"></span>
+                </a>
+            </div> --}}
+            <div class="col-md-12 py-5 wrap-about pb-md-5 ftco-animate">
+                <div class="heading-section heading-section-wo-line pt-md-5 mb-5">
+                    <div class="ml-md-0">
+                        <span class="subheading">Welcome to Qatara Family Resort</span>
+                        <h2 class="mb-4">Welcome To Our Hotel</h2>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div> --}}
-<!-- about_area_end -->
-
-<!-- offers_area_start -->
-{{-- <div class="offers_area">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="section_title text-center mb-100">
-                    <span>Our Offers</span>
-                    <h3>Ongoing Offers</h3>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xl-4 col-md-4">
-                <div class="single_offers">
-                    <div class="about_thumb">
-                        <img src="{{ asset('website/img/offers/1.png') }}" alt="">
-                    </div>
-                    <h3>Up to 35% savings on Club <br>
-                        rooms and Suites</h3>
-                    <ul>
-                        <li>Luxaries condition</li>
-                        <li>3 Adults & 2 Children size</li>
-                        <li>Sea view side</li>
+                <div class="pb-md-5">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nascetur ridiculus mus mauris vitae ultricies leo integer. Pellentesque id nibh tortor id. Scelerisque varius morbi enim nunc faucibus a pellentesque. Id velit ut tortor pretium viverra. Sit amet mattis vulputate enim nulla aliquet. Dui accumsan sit amet nulla facilisi morbi tempus. Tellus cras adipiscing enim eu turpis. At imperdiet dui accumsan sit amet nulla facilisi. Arcu bibendum at varius vel pharetra vel turpis. Purus in mollis nunc sed. Varius sit amet mattis vulputate enim.</p>
+                    <p>Phasellus faucibus scelerisque eleifend donec pretium vulputate sapien. Elit sed vulputate mi sit amet mauris commodo quis imperdiet. Lacus viverra vitae congue eu consequat ac. Quisque id diam vel quam elementum pulvinar etiam. Nulla facilisi cras fermentum odio eu feugiat pretium nibh. Velit egestas dui id ornare arcu odio ut sem. Elit ut aliquam purus sit amet luctus venenatis lectus. Orci ac auctor augue mauris. Fermentum odio eu feugiat pretium nibh ipsum consequat nisl vel. Velit euismod in pellentesque massa. Urna porttitor rhoncus dolor purus non enim praesent. Laoreet suspendisse interdum consectetur libero id faucibus nisl tincidunt eget. Tristique senectus et netus et. Nunc congue nisi vitae suscipit tellus mauris a diam maecenas. Quisque id diam vel quam elementum pulvinar etiam non. Malesuada fames ac turpis egestas sed tempus urna et pharetra. Risus ultricies tristique nulla aliquet enim.</p>
+                    <ul class="ftco-social d-flex">
+                        {{-- <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li> --}}
+                        <li class="ftco-animate"><a href="https://www.facebook.com/PearlofQatarAlaminos" target="_blank"><span class="icon-facebook"></span></a></li>
+                        {{-- <li class="ftco-animate"><a href="#"><span class="icon-google-plus"></span></a></li> --}}
+                        {{-- <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li> --}}
                     </ul>
-                    <a href="#" class="book_now">book now</a>
-                </div>
-            </div>
-            <div class="col-xl-4 col-md-4">
-                <div class="single_offers">
-                    <div class="about_thumb">
-                        <img src="{{ asset('website/img/offers/2.png') }}" alt="">
-                    </div>
-                    <h3>Up to 35% savings on Club <br>
-                        rooms and Suites</h3>
-                    <ul>
-                        <li>Luxaries condition</li>
-                        <li>3 Adults & 2 Children size</li>
-                        <li>Sea view side</li>
-                    </ul>
-                    <a href="#" class="book_now">book now</a>
-                </div>
-            </div>
-            <div class="col-xl-4 col-md-4">
-                <div class="single_offers">
-                    <div class="about_thumb">
-                        <img src="{{ asset('website/img/offers/3.png') }}" alt="">
-                    </div>
-                    <h3>Up to 35% savings on Club <br>
-                        rooms and Suites</h3>
-                    <ul>
-                        <li>Luxaries condition</li>
-                        <li>3 Adults & 2 Children size</li>
-                        <li>Sea view side</li>
-                    </ul>
-                    <a href="#" class="book_now">book now</a>
                 </div>
             </div>
         </div>
     </div>
-</div> --}}
-<!-- offers_area_end -->
+</section>
 
-<!-- video_area_start -->
-{{-- <div class="video_area video_bg overlay">
-    <div class="video_area_inner text-center">
-        <span>Montana Sea View</span>
-        <h3>Relax and Enjoy your <br>
-            Vacation </h3>
-        <a href="https://www.youtube.com/watch?v=vLnPwxZdW4Y" class="video_btn popup-video">
-            <i class="fa fa-play"></i>
-        </a>
-    </div>
-</div> --}}
-<!-- video_area_end -->
-
-<!-- about_area_start -->
-<div class="about_area">
+{{-- Featured Rooms --}}
+@if($featuredRooms->count() > 0)
+<section class="ftco-section bg-light">
     <div class="container">
+            <div class="row justify-content-center mb-5 pb-3">
+      <div class="col-md-7 heading-section text-center ftco-animate">
+        <h2 class="mb-4">Our Rooms</h2>
+      </div>
+    </div>    		
         <div class="row">
-            <div class="col-xl-7 col-lg-7">
-                <div class="about_thumb2 d-flex">
-                    <div class="img_1">
-                        <img src="{{ asset('images/food-1.jpg') }}" alt="">
-                    </div>
-                    <div class="img_2">
-                        <img src="{{ asset('images/food-2.jpg') }}" alt="">
+            @foreach ($featuredRooms as $room)
+            <div class="col-sm col-md-6 col-lg-4 ftco-animate">
+                <div class="room">
+                    <a href="javascript:void(0)" class="img d-flex justify-content-center align-items-center" style="background-image: url({{ asset('images/rooms/'.$room->image) }});">
+                        {{-- <div class="icon d-flex justify-content-center align-items-center">
+                            <span class="icon-search2"></span>
+                        </div> --}}
+                    </a>
+                    <div class="text p-3 text-center">
+                        <h3 class="mb-3"><a href="rooms.html">{{ $room->room_type->name }}</a></h3>
+                        <p><span class="price mr-2">₱{{ number_format($room->amount, 2) }}</span> <span class="per">per night</span></p>
+                        {{-- <hr>
+                        <p class="pt-1"><a href="room-single.html" class="btn-custom">View Room Details <span class="icon-long-arrow-right"></span></a></p> --}}
                     </div>
                 </div>
             </div>
-            <div class="col-xl-5 col-lg-5">
-                <div class="about_info">
-                    <div class="section_title mb-20px">
-                        <span>Delicious Food</span>
-                        <h3>We Serve Fresh and <br>
-                            Delicious Food</h3>
-                    </div>
-                    <p>Suscipit libero pretium nullam potenti. Interdum, blandit phasellus consectetuer dolor ornare
-                        dapibus enim ut tincidunt rhoncus tellus sollicitudin pede nam maecenas, dolor sem. Neque
-                        sollicitudin enim. Dapibus lorem feugiat facilisi faucibus et. Rhoncus.</p>
-                    {{-- <a href="#" class="line-button">Learn More</a> --}}
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
-</div>
-<!-- about_area_end -->
+</section>
+@endif
 
-<!-- features_room_startt -->
-{{-- @if($featuredRooms->count() > 0)
-<div class="features_room">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="section_title text-center mb-100">
-                    <span>Featured Rooms</span>
-                    <h3>Choose a Better Room</h3>
-                </div>
-            </div>
-        </div>
-    </div>
-    @foreach ($featuredRooms as $room)
-    <div class="rooms_here">
-        <div class="single_rooms">
-            <div class="room_thumb">
-                <img src="{{ asset('images/rooms/'.$room->image) }}" alt="">
-                <div class="room_heading d-flex justify-content-between align-items-center">
-                    <div class="room_heading_inner">
-                        <span>From ₱{{ $room->amount }}/night</span>
-                        <h3>{{ $room->room_type->name }}</h3>
-                    </div>
-                    <a href="#" class="line-button">book now</a>
-                </div>
-            </div>
-        </div>
-        @endforeach
-    </div>
-</div>
-@endif --}}
-<!-- features_room_end -->
-
-<!-- forQuery_start -->
-{{-- <div class="forQuery">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-10 offset-xl-1 col-md-12">
-                <div class="Query_border">
-                    <div class="row align-items-center justify-content-center">
-                        <div class="col-xl-6 col-md-6">
-                            <div class="Query_text">
-                                <p>For Reservation 0r Query?</p>
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-md-6">
-                            <div class="phone_num">
-                                <a href="#" class="mobile_no">+10 576 377 4789</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> --}}
-<!-- forQuery_end-->
-
-<!-- instragram_area_start -->
-{{-- <div class="instragram_area">
-    <div class="single_instagram">
-        <img src="{{ asset('website/img/instragram/1.png') }}" alt="">
-        <div class="ovrelay">
-            <a href="#">
-                <i class="fa fa-instagram"></i>
-            </a>
-        </div>
-    </div>
-    <div class="single_instagram">
-        <img src="{{ asset('website/img/instragram/2.png') }}" alt="">
-        <div class="ovrelay">
-            <a href="#">
-                <i class="fa fa-instagram"></i>
-            </a>
-        </div>
-    </div>
-    <div class="single_instagram">
-        <img src="{{ asset('website/img/instragram/3.png') }}" alt="">
-        <div class="ovrelay">
-            <a href="#">
-                <i class="fa fa-instagram"></i>
-            </a>
-        </div>
-    </div>
-    <div class="single_instagram">
-        <img src="{{ asset('website/img/instragram/4.png') }}" alt="">
-        <div class="ovrelay">
-            <a href="#">
-                <i class="fa fa-instagram"></i>
-            </a>
-        </div>
-    </div>
-    <div class="single_instagram">
-        <img src="{{ asset('website/img/instragram/5.png') }}" alt="">
-        <div class="ovrelay">
-            <a href="#">
-                <i class="fa fa-instagram"></i>
-            </a>
-        </div>
-    </div>
-</div> --}}
-<!-- instragram_area_end -->
 @endsection
