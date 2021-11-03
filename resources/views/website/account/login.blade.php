@@ -22,14 +22,19 @@
                         <input id="password" type="password" class="form-control" name="password" required>
                     </div>
                     <div class="form-group">
-                        <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#register" data-href="{{ route('client.register') }}">
+                        @if(Route::has('password.request'))
+                            <a class="btn btn-link" href="{{ route('password.request') }}">
+                                {{ trans('global.forgot_password') }}
+                            </a><br>
+                        @endif
+                        <a class="btn btn-link" href="javascript:void(0)" data-toggle="modal-ajax" data-target="#register" data-href="{{ route('client.register') }}">
                             Doesn't have an account? Register Here
                         </a>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal-ajax">Cancel</button>
-                    <button class="btn btn-default text-success" type="submit"><i class="fas fa-save"></i> Login</button>
+                    <button class="btn btn-default text-success" id="submit-button" type="submit">Login</button>
                 </div>
             </div>
         </div>
@@ -38,6 +43,7 @@
 <script>
     $(function(){
         $('#login-form').on('submit', function(e){
+            $('#submit-button').find('button[type=submit]').prop('disabled', true).append(' <i class="fa fa-spinner fa-spin fa-pulse"></i>')
             e.preventDefault();
             $.ajaxSetup({
                 headers: {
@@ -56,6 +62,7 @@
                     if(response.error_msg){
                         console.log(response.error_msg)
                         $("#error-msg").html(response.error_msg);
+                        $('#submit-button').prop('disabled', false).html('Login')
                     }
                     if(response.redirect){
                         console.log(response.redirect)

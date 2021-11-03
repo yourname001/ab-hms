@@ -1,6 +1,19 @@
 {{-- My Scripts --}}
 <script src="{{ asset('website/plugins/select2/js/select2.full.min.js') }}"></script>
 <script src="{{ asset('website/plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
+{{-- Disable Submit Button --}}
+<script type="application/javascript">
+    $(function() {
+        /*$(document).on('click', '.btn-submit-out', function() {
+            $(this).prop('disabled', true).append(' <i class="fa fa-spinner fa-pulse"></i>');
+            $($(this).data('submit')).submit();
+        });*/
+
+        $(document).on('submit', 'form', function(){
+            $(this).find('button[type=submit]').prop('disabled', true).append(' <i class="fa fa-spinner fa-spin fa-pulse"></i>')
+        })
+    });
+</script>
 <script>
     $('#datepicker').datepicker({
         iconsLibrary: 'fontawesome',

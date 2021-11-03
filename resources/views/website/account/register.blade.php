@@ -55,7 +55,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal-ajax">Cancel</button>
-                    <button class="btn btn-default text-success" type="submit"><i class="fas fa-save"></i> <i class="fa fa-spinner fa-spin fa-pulse"></i>Login</button>
+                    <button class="btn btn-default text-success" type="submit"> Register</button>
                 </div>
             </div>
         </div>

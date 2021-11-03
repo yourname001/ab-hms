@@ -27,7 +27,7 @@ Route::get('/resort', function () {
 })->middleware('verified');
 
 // Auth::routes(['register' => false]);
-Auth::routes(['verify' => true, 'register' => false]);
+Auth::routes(['verify' => true]);
 // Admin
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {

@@ -35,7 +35,7 @@
     <link rel="stylesheet" href="{{ asset('website/css/style.css') }}">
 
     {{-- fontawesome --}}
-    <link rel="stylesheet" href="{{ asset('webfonts/fontawesome-pro-5.12.0-web/js/all.min.js') }}">
+    <link rel="stylesheet" href="{{ asset('webfonts/fontawesome-pro-5.12.0-web/css/all.min.css') }}">
 
     {{-- <link rel="shortcut icon" type="image/x-icon" href="{{ asset('website/img/favicon.png') }}"> --}}
 
