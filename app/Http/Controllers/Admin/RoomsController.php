@@ -99,9 +99,12 @@ class RoomsController extends Controller
         ]);
         
         if($request->file('image')){
+            $request->validate([
+                'image' => 'mimes:jpeg,jpg,png'
+            ]);
             $file = $request->file('image');
             $fileName = $request->get('name') . '_' . date('m-d-Y H.i.s') . '.' . $file->getClientOriginalExtension();
-            Storage::disk('upload')->putFileAs('images/rooms', $request->file('image'), $fileName);
+            Storage::disk('upload')->putFileAs('images/user', $request->file('image'), $fileName);
             $room->update([
                 'image' => $fileName
             ]);
@@ -169,7 +172,7 @@ class RoomsController extends Controller
     {
         abort_if(Gate::denies('room_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $room->load('hotel', 'room_type', 'roomBookings');
+        $room->load('room_type', 'roomBookings');
 
         return view('admin.rooms.show', compact('room'));
     }
@@ -190,20 +193,51 @@ class RoomsController extends Controller
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
+    public function filterRoomByType(Request $request)
+    {
+        $rooms = Room::where('room_type_id', $request->get('room_type'))->get();
+        $options = '<option></option>';
+		foreach ($rooms as $room) {
+			// $options .= '<option value="'.$room->id.'">';
+			$options .= '<option value="'.$room->id.'" '. ($request->get('selected_room') == $room->id ? 'selected' : '') .'>';
+			$options .= $room->name;
+			$options .= '</option>';
+		}
+		return response()->json([
+            'room_options' => $options
+        ]);
+    }
 
     public function filter_rooms(Request $request)
     {
-        $book_date = $request->get('book_date');
-        $book_from = explode(' - ', $book_date)[0];
-        $book_to = explode(' - ', $book_date)[1];
-        // $bookings = Booking::whereBetween('booking_date_from', [$book_from, $book_to])->get('room_id');
-        $bookings = Booking::where('booking_status', '>', 0)
-                            ->get('room_id');
+        $bookings = [0];
+        if(!is_null($request->get('book_date'))){
+            $book_date = $request->get('book_date');
+            $book_from = date('Y-m-d', strtotime(explode(' - ', $book_date)[0]));
+            $book_to = date('Y-m-d', strtotime(explode(' - ', $book_date)[1]));
+            // $bookings = Booking::whereBetween('booking_date_from', [$book_from, $book_to])->get('room_id');
+            $bookings = Booking::whereIn('booking_status', ['confirmed', 'checked in'])
+                                ->whereBetween('booking_date_from', [$book_from, $book_to])
+                                // ->whereBetween('booking_date_to', [$book_from, $book_to])
+                                ->get('room_id');
+        }
         // $rooms = Room::where('room_type_id', $request->get('room_type'))->whereNotIn('id', $bookings)->get();
         $rooms = Room::where('room_type_id', $request->get('room_type'))->whereNotIn('id', $bookings)->get();
-		$options = '<option></option>';
+        $options = '<option></option>';
+        /* if(!is_null($request->get('booking_id'))) {
+            $booking = Booking::find($request->get('booking_id'));
+            if($booking->room->room_type_id == $request->get('room_type')){
+                $bookingRoom = Room::find($booking->room_id);
+                $options .= '<option value="'.$bookingRoom->id.'" selected>';
+                $options .= $bookingRoom->name;
+                $options .= ' (Max Person: '.$bookingRoom->capacity.')';
+                $options .= ' [Amount/Day: ₱'.number_format($bookingRoom->amount,2).']';
+                $options .= '</option>';
+            }
+        } */
 		foreach ($rooms as $room) {
-			$options .= '<option value="'.$room->id.'">';
+			// $options .= '<option value="'.$room->id.'">';
+			$options .= '<option value="'.$room->id.'" '. ($request->get('room_id') == $room->id ? 'selected' : '') .'>';
 			$options .= $room->name;
 			$options .= ' (Max Person: '.$room->capacity.')';
 			$options .= ' [Amount/Day: ₱'.number_format($room->amount,2).']';

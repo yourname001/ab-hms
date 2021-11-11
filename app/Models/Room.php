@@ -50,4 +50,15 @@ class Room extends Model
                 $query->where('name', 'LIKE', '%'.request()->input('room').'%');
             });
     }
+
+    public function roomImage()
+    {
+        $image = "";
+        if(is_null($this->image)){
+            $image = "images/image-icon.png"; 
+        }else{
+            $image = "images/rooms/".$this->image; 
+        }
+        return $image;
+    }
 }

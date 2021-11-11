@@ -65,7 +65,10 @@ class PaymentController extends Controller
                     'mode_of_payment' => 'cash',
                     'amount' => $request->get('amount'),
                 ]);
-
+                $amount = Payment::where([
+                    ['booking_id', $booking->id],
+                    ['payment_status', 'confirmed'],
+                ])->sum('amount');
                 $payment_status = 'paid';
                 if($amount < $payment->booking->amount){
                     $payment_status = 'partial';
@@ -74,7 +77,7 @@ class PaymentController extends Controller
                     'payment_status' => $payment_status
                 ]);
 
-                return redirect()->route('admin.bookings.index');
+                return redirect()->route('admin.bookings.show', $booking->id)->with('alert-success', 'Saved');
 
             }elseif($request->get('payment_method') == 'gcash'){
                 $payment = Payment::create([
@@ -91,6 +94,8 @@ class PaymentController extends Controller
                         'proof_of_payment' => $fileName
                     ]);
                 }
+
+                return redirect()->route('client_bookings.index')->with('alert-success', 'Saved');
             }
 
         }
@@ -155,6 +160,10 @@ class PaymentController extends Controller
                 'payment_status' => $request->get('remarks'),
                 'amount' => $amount,
             ]);
+            $amount = Payment::where([
+                ['booking_id', $payment->booking->id],
+                ['payment_status', 'confirmed'],
+            ])->sum('amount');
             $payment_status = 'paid';
             if($amount < $payment->booking->amount){
                 $payment_status = 'partial';

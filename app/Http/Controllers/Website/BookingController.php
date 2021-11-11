@@ -8,6 +8,7 @@ use App\Models\Room;
 use App\Models\RoomType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Auth;
 
@@ -72,28 +73,9 @@ class BookingController extends Controller
         $book_to = Carbon::parse($book_date[1]);
 
         $date_from = Carbon::createFromDate($book_from);
-        // $days = $date_from->diffForHumans($book_to);
+
         $days = $date_from->diffInDays($book_to);
-        /* $minutes = $date_from->diffInMinutes($book_to);
 
-        // hours exceed
-        $exceeding_hours = (($minutes/60) - ($days * 24));
-        // minutues exceed
-        $exceeding_minutes = (($minutes/60) - $exceeding_hours);
-
-        $duration = $days . "Days " . $exceeding_hours . "Hours " . $exceeding_minutes . "Minutes";
-
-        echo "Date: " . $request->get('book_date'). "<br>";
-        echo "From: " . $book_from. "<br>";
-        echo "To: " . $book_to. "<br>";
-        echo "Duration: " . $duration. "<br>";
-        // Compute Amount
-        if($exceeding_hours > 0 || $exceeding_minutes > 0) {
-
-        }else{
-            $amount = $amount * $days;
-        } */
-        // echo "Amount: " . ($room->amount * $days);
 
         $amount = $amount * $days;
 
@@ -106,9 +88,18 @@ class BookingController extends Controller
             'booking_date_from' => $book_date[0],
             'booking_date_to' => $book_date[1],
         ]);
+
+        if($request->file('image')){
+            $image = $request->file('image');
+            $storagePath = 'images/user';
+            $fileName = $booking->id . '_' . date('m-d-Y H.i.s') . '.' . $image->getClientOriginalExtension();
+            Storage::disk('upload')->putFileAs('images/proof-of-identity/', $image, $fileName);
+            $booking->update([
+                'proof_of_identity' => $fileName
+            ]);
+        }
         
-        return back();
-        // Mail::to(Auth::user())->send(new Booking($booking));
+        return redirect()->route('client_bookings.index');
 
     }
 
@@ -138,7 +129,15 @@ class BookingController extends Controller
      */
     public function edit(Booking $booking)
     {
-        //
+        if(request()->ajax()) {
+            $data = [
+                'booking' => $booking,
+                'room_types' => RoomType::get(),
+            ];
+            return response()->json([
+                'modal_content' => view('website.bookings.edit', $data)->render()
+            ]);
+        }
     }
 
     /**
@@ -150,7 +149,36 @@ class BookingController extends Controller
      */
     public function update(Request $request, Booking $booking)
     {
-        //
+        $request->validate([
+            'book_date' => 'required',
+            'room_type' => 'required',
+            'room' => 'required'
+        ]);
+
+        $room = Room::find($request->get('room'));
+        $amount = $room->amount;
+
+        $book_date = explode(' - ',$request->get('book_date'));
+        $book_from = Carbon::parse($book_date[0]);
+        $book_to = Carbon::parse($book_date[1]);
+
+        $date_from = Carbon::createFromDate($book_from);
+
+        $days = $date_from->diffInDays($book_to);
+
+        $amount = $amount * $days;
+
+        $booking->update([
+            // 'payment_status' => 'unpaid',
+            // 'booking_status' => 'pending',
+            'room_id' => $request->get('room'),
+            'user_id' => Auth::user()->id,
+            'amount' => $amount,
+            'booking_date_from' => $book_date[0],
+            'booking_date_to' => $book_date[1],
+        ]);
+        
+        return redirect()->route('client_bookings.index');
     }
 
     /**
@@ -169,13 +197,19 @@ class BookingController extends Controller
         $booking->update([
             'booking_status' => 'expired'
         ]);
+        return redirect()->route('client_bookings.index');
     }
 
-    public function cancelBooking(Booking $booking)
+    public function cancelBooking(Request $request, Booking $booking)
     {
+        $request->validate([
+            'reason_of_cancellation' => 'required'
+        ]);
         $booking->update([
+            'reason_of_cancellation' => $request->get('reason_of_cancellation'),
+            'other_reasons' => $request->get('other_reasons'),
             'booking_status' => 'canceled'
         ]);
+        return redirect()->route('client_bookings.index');
     }
-
 }

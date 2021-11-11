@@ -8,57 +8,42 @@
 
                 <p class="text-muted">{{ trans('global.login') }}</p>
 
-                @if(session('status'))
+                {{-- @if(session('status'))
                     <div class="alert alert-success" role="alert">
                         {{ session('status') }}
                     </div>
-                @endif
-
-                <form method="POST" action="{{ route('login') }}">
+                @endif --}}
+                
+                <form id="login-form">
                     @csrf
-
+                    <div class="form-group">
+                        <span class="text-danger" id="error-msg"></span>
+                    </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
                                 <i class="fa fa-user"></i>
                             </span>
                         </div>
-
-                        <input id="email" name="email" type="text" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" required autocomplete="email" autofocus placeholder="{{ trans('global.login_email') }}" value="{{ old('email', null) }}">
-
-                        @if($errors->has('email'))
-                            <div class="invalid-feedback">
-                                {{ $errors->first('email') }}
-                            </div>
-                        @endif
+                        <input id="email" name="email" type="text" class="form-control" required autocomplete="email" autofocus placeholder="{{ trans('global.login_email') }}" value="{{ old('email', null) }}">
                     </div>
-
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-lock"></i></span>
                         </div>
-
-                        <input id="password" name="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" required placeholder="{{ trans('global.login_password') }}">
-
-                        @if($errors->has('password'))
-                            <div class="invalid-feedback">
-                                {{ $errors->first('password') }}
-                            </div>
-                        @endif
+                        <input id="password" name="password" type="password" class="form-control" required placeholder="{{ trans('global.login_password') }}">
                     </div>
-
-                    <div class="input-group mb-4">
+                    {{-- <div class="input-group mb-4">
                         <div class="form-check checkbox">
                             <input class="form-check-input" name="remember" type="checkbox" id="remember" style="vertical-align: middle;" />
                             <label class="form-check-label" for="remember" style="vertical-align: middle;">
                                 {{ trans('global.remember_me') }}
                             </label>
                         </div>
-                    </div>
-
+                    </div> --}}
                     <div class="row">
                         <div class="col-6">
-                            <button type="submit" class="btn btn-primary px-4">
+                            <button id="submit-button" type="submit" class="btn btn-primary px-4">
                                 {{ trans('global.login') }}
                             </button>
                         </div>
@@ -68,7 +53,6 @@
                                     {{ trans('global.forgot_password') }}
                                 </a><br>
                             @endif
-
                         </div>
                     </div>
                 </form>
@@ -76,4 +60,38 @@
         </div>
     </div>
 </div>
+@endsection
+@section('scripts')
+<script>
+    // alert('asdasd')
+    $(function(){
+        $('#login-form').on('submit', function(e){
+            // $('#submit-button').prop('disabled', true).append(' <i class="fa fa-spinner fa-spin fa-pulse"></i>')
+            e.preventDefault();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $("#error-msg").html("");
+            $.ajax({
+                type:'POST',
+                url:'/login',
+                data: {
+                    email: $('#email').val(),
+                    password: $('#password').val()
+                },
+                success:function(response) {
+                    if(response.error_msg){
+                        $("#error-msg").html(response.error_msg);
+                        $('#submit-button').prop('disabled', false).html('Login')
+                    }
+                    if(response.redirect){
+                        window.location.href = response.redirect;
+                    }
+                }
+            });
+        });
+    })
+</script>
 @endsection

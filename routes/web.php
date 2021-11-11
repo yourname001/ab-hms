@@ -61,9 +61,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Bookings
     Route::delete('bookings/destroy', 'BookingsController@massDestroy')->name('bookings.massDestroy');
     Route::resource('bookings', 'BookingsController');
+    Route::get('print-booking-report', 'BookingsController@printReport')->name('bookings.print_report');
     Route::get('bookings/confirm/{booking}', 'BookingsController@confirm')->name('bookings.confirm');
     Route::get('bookings/check-in/{booking}', 'BookingsController@checkIn')->name('bookings.check_in');
     Route::get('bookings/cancel/{booking}', 'BookingsController@cancel')->name('bookings.cancel');
+
+    // payments
+    Route::delete('payments/destroy', 'PaymentsController@massDestroy')->name('payments.massDestroy');
+    Route::resource('payments', 'PaymentsController');
 
     // payments
     // Route::get('admin/payments/create', 'Admin\BookingsController@createPayment')->name('admin.payments.create');
@@ -79,17 +84,24 @@ Route::resource('resort', 'Website\HomeController')->parameters([
 ]);
 Route::get('resort_login', 'Website\HomeController@login')->name('client.login');
 Route::get('resort_register', 'Website\HomeController@register')->name('client.register');
-Route::post('client_register', 'Website\HomeController@clientRegister')->name('client.client_register');
+// Route::post('client_register', 'Website\HomeController@clientRegister')->name('client.client_register');
 
 Route::group(array('middleware'=>['auth']), function() {
     Route::resource('client_bookings', 'Website\BookingController')->parameters([
 		'client_bookings' => 'booking'
     ]);
 
+    Route::put('client_booking/cancel/{booking}', 'Website\BookingController@cancelBooking')->name('client_bookings.cancel');
+
     Route::get('get_room_info/{room}', 'Admin\RoomsController@get_room_info');
 
     Route::get('client_cooking/payments/{booking}', 'Website\BookingController@payments')->name('client_bookings.payments');
 
     Route::post('filter_rooms', 'Admin\RoomsController@filter_rooms');
+    Route::get('filter_room_by_type', 'Admin\RoomsController@filterRoomByType');
     Route::resource('payments', 'Website\PaymentController');
+
+    // Client
+    Route::get('client/account/{user}', 'Website\ClientController@account')->name('client.account');
+    Route::put('client/account/update/{user}', 'Website\ClientController@updateAccount')->name('client.update');
 });

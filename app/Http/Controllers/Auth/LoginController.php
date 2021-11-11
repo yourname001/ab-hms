@@ -66,10 +66,12 @@ class LoginController extends Controller
                 }
             }
         }else{
-            $msg = "User not found, Invalid Email or Password.";
-            return response()->json([
-                'error_msg'=> $msg
-            ]);
+            if($request->ajax()){
+                $msg = "User not found, Invalid Email or Password.";
+                return response()->json([
+                    'error_msg'=> $msg
+                ]);
+            }
         }
     }
 }

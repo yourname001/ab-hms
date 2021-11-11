@@ -135,4 +135,22 @@ return [
             'deleted_at_helper'   => '',
         ],
     ],
+    'payment'        => [
+        'title'          => 'Payments',
+        'title_singular' => 'Payment',
+        'fields'         => [
+            'id'                  => 'ID',
+            'id_helper'           => '',
+            'booking'             => 'Booking',
+            'booking_helper'      => '',
+            'payment_date'        => 'Payment Date',
+            'payment_date_helper' => '',
+            'created_at'          => 'Created at',
+            'created_at_helper'   => '',
+            'updated_at'          => 'Updated at',
+            'updated_at_helper'   => '',
+            'deleted_at'          => 'Deleted at',
+            'deleted_at_helper'   => '',
+        ],
+    ],
 ];

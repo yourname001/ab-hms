@@ -31,6 +31,9 @@
 </script>
 <script>
     $(function() {
+        // for select2 inside the modal
+        $.fn.modal.Constructor.prototype._enforceFocus = function() {};
+        
         $.fn.select2.defaults.set('theme', 'bootstrap4');
         $.fn.select2.defaults.set('placeholder', 'Select');
 

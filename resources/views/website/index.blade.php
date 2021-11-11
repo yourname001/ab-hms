@@ -32,8 +32,9 @@
 </section>
 @auth
 @if(is_null(Auth::user()->email_verified_at))
+<div style="margin-bottom: 100px" id="verify-email"></div>
 <section class="ftco-section mt-5 ftc-no-pb ftc-no-pt">
-    <div class="container" id="verify-email">
+    <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="alert alert-warning">

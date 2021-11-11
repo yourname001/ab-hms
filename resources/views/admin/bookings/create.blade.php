@@ -13,6 +13,16 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
+                        <label class="required" for="booking_date">Booking Date</label>
+                        <input type="text" class="form-control" name="book_date" id="bookDate">
+                        @if($errors->has('book_date'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('book_date') }}
+                            </div>
+                        @endif
+                        <span class="help-block">{{ trans('cruds.booking.fields.booking_date_helper') }}</span>
+                    </div>
+                    <div class="form-group">
                         <label class="required" for="client">Client</label>
                         <select class="form-control select2 {{ $errors->has('client') ? 'is-invalid' : '' }}" name="client">
                             <option></option>
@@ -31,7 +41,7 @@
                     </div>
                     <div class="form-group">
                         <label class="required" for="room_id">Room Type</label>
-                        <select class="form-control select2" id="roomType" name="room_type">
+                        <select class="form-control select2" id="roomType" name="room_type" style="width: 100%">
                             <option></option>
                             @foreach($room_types as $room_type)
                                 <option value="{{ $room_type->id }}">{{ $room_type->name }}</option>
@@ -40,7 +50,7 @@
                     </div>
                     <div class="form-group">
                         <label class="required" for="rooms">{{ trans('cruds.booking.fields.room') }}</label>
-                        <select class="form-control select2 {{ $errors->has('room') ? 'is-invalid' : '' }}" name="room" id="rooms" required>
+                        <select class="form-control select2 {{ $errors->has('room') ? 'is-invalid' : '' }}" name="room" id="rooms" required style="width: 100%">
                             {{-- @foreach($rooms as $room)
                                 <option value="{{ $room->id }}" {{ old('room_id') == $id ? 'selected' : '' }}>{{ $room->name }}</option>
                             @endforeach --}}
@@ -51,16 +61,6 @@
                             </div>
                         @endif
                         <span class="help-block">{{ trans('cruds.booking.fields.room_helper') }}</span>
-                    </div>
-                    <div class="form-group">
-                        <label class="required" for="booking_date">Date</label>
-                        <input type="text" class="form-control" name="book_date" id="bookDate">
-                        @if($errors->has('book_date'))
-                            <div class="invalid-feedback">
-                                {{ $errors->first('book_date') }}
-                            </div>
-                        @endif
-                        <span class="help-block">{{ trans('cruds.booking.fields.booking_date_helper') }}</span>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -143,7 +143,7 @@
                 $('#roomImage').attr('src', data.room_image);
                 $('#roomName').html(data.room.name)
                 $('#roomDescription').html(data.room.description)
-                $('#roomAmount').html('₱ ' + data.room.amount)
+                $('#roomAmount').html('₱ ' + data.room.amount + "/night")
                 $('#roomInfo').fadeIn()
             },
             error:function (data){
@@ -168,6 +168,17 @@
                 format: 'Y-M-DD'
             }
         });
+
+        // Clear room type, rooms, and room info when date is changed
+        $('input[name="book_date"]').change(function(){
+            $('#roomInfo').fadeOut();
+            $("#roomType").val('').trigger('change')
+            $('#rooms').html('<option></option>');
+            $('#rooms').select2({
+                placeholder: "Select",
+            });
+            $("#rooms").val('')
+        })
     })
 </script>
 @endsection

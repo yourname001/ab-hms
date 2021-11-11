@@ -43,7 +43,7 @@
 <script>
     $(function(){
         $('#login-form').on('submit', function(e){
-            $('#submit-button').find('button[type=submit]').prop('disabled', true).append(' <i class="fa fa-spinner fa-spin fa-pulse"></i>')
+            // $('#submit-button').prop('disabled', true).append(' <i class="fa fa-spinner fa-spin fa-pulse"></i>')
             e.preventDefault();
             $.ajaxSetup({
                 headers: {

@@ -21,6 +21,7 @@ class Booking extends Model
     ]; */
 
     protected $fillable = [
+        'proof_of_identity',
         'room_id',
         'user_id',
         'booking_date_from',
@@ -28,6 +29,8 @@ class Booking extends Model
         'amount',
         'payment_status',
         'booking_status',
+        'reason_of_cancellation',
+        'other_reasons',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -95,4 +98,33 @@ class Booking extends Model
         }
         return $status;
     }
+
+    public function isPaid()
+    {
+        $confirmedPayment = $this->payments->where('payment_status', 'confirmed')->sum('amount');
+        if($this->amount <= $confirmedPayment){
+            return true;
+        }
+        return false;
+    }
+
+    public function isCanceled()
+    {
+        return self::where([
+            ['id', $this->id],
+            ['booking_status', 'canceled'],
+        ])->exists();
+    }
+
+    public function proofOfIdentity()
+    {
+        $image = "";
+        if(is_null($this->proof_of_identity)){
+            $image = "images/image-icon.png"; 
+        }else{
+            $image = "images/proof-of-identity/".$this->proof_of_identity; 
+        }
+        return $image;
+    }
+
 }

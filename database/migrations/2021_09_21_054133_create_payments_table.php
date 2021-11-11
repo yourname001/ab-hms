@@ -25,6 +25,7 @@ class CreatePaymentsTable extends Migration
                 ->onDelete('cascade');
             $table->integer('amount')->default(0)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

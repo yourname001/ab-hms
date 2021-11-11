@@ -17,6 +17,14 @@
                 <tbody>
                     <tr>
                         <th>
+                            Image
+                        </th>
+                        <td>
+                            <img src="{{ asset('images/rooms/'.$room->image) }}" class="img-thumbnail" width="25%">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.room.fields.id') }}
                         </th>
                         <td>
@@ -29,14 +37,6 @@
                         </th>
                         <td>
                             {{ $room->name }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.room.fields.hotel') }}
-                        </th>
-                        <td>
-                            {{ $room->hotel->name ?? '' }}
                         </td>
                     </tr>
                     <tr>

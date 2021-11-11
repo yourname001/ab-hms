@@ -30,6 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     protected $fillable = [
+        'image',
         'first_name',
         'last_name',
         'contact_number',
@@ -60,6 +61,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getIsAdminAttribute()
     {
         return $this->roles()->where('id', 1)->exists();
+    }
+
+    public function name()
+    {
+        return $this->first_name.' '.$this->last_name;
     }
 
     /* public function getEmailVerifiedAtAttribute($value)

@@ -27,6 +27,25 @@ class HomeController extends Controller
         return view('website.index', $data);
     }
 
+    public function login()
+    {
+        if(request()->ajax()) {
+            return response()->json([
+                'modal_content' => view('website.account.login')->render()
+            ]);
+        }
+    }
+
+    public function register()
+    {
+        if(request()->ajax()) {
+            return response()->json([
+                'modal_content' => view('website.account.register')->render()
+            ]);
+        }
+    }
+    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -93,63 +112,4 @@ class HomeController extends Controller
         //
     }
 
-    public function login()
-    {
-        if(request()->ajax()) {
-            return response()->json([
-                'modal_content' => view('website.account.login')->render()
-            ]);
-        }
-    }
-
-    public function register()
-    {
-        if(request()->ajax()) {
-            return response()->json([
-                'modal_content' => view('website.account.register')->render()
-            ]);
-        }
-    }
-
-    public function clientRegister(Request $request)
-    {
-        $request->validate([
-            // 'name' => ['required', 'string', 'max:255'],
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'contact_number' => ['required', 'string', 'max:255', 'unique:users'],
-            'address' => ['required', 'string'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-
-        if ($validator->fails()) {
-            return reponse()->json([
-                'success' => false,
-                'asd' => $validator->getMessageBag()->toArray()
-
-            ], 400); // 400 being the HTTP code for an invalid request.
-        }
-
-        $user = User::create([
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'contact_number' => $data['contact_number'],
-            'address' => $data['address'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
-        RoleUser::create([
-            'user_id' => $user->id,
-            'role_id' => 3
-        ]);
-
-        // $this->guard()->login($user);
-
-        return reponse()->json(['success' => true], 200);
-
-        /* return response()->json([
-            'error'
-        ]); */
-    }
 }

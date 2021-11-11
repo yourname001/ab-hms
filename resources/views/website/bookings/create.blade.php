@@ -1,7 +1,7 @@
-<form action="{{ route('client_bookings.store') }}" method="POST" autocomplete="off">
+<form action="{{ route('client_bookings.store') }}" method="POST" autocomplete="off" enctype="multipart/form-data">
     @csrf
-    <div class="modal fase" id="addBooking" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog {{-- modal-dialog-centered  --}}modal-md" role="document">
+    <div class="modal fade" id="addBooking" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Add Booking</h5>
@@ -15,16 +15,10 @@
                             <div class="form-group">
                                 <label>Date</label>
                                 <input type="text" class="form-control" name="book_date" id="bookDate" {{-- value="{{ $book_date }}" --}}>
-                                {{-- <div class="input-group datetimepickers" id="bookingTime" data-target-input="nearest">
-                                    <input type="text" name="booking_time" class="form-control datetimepicker-input" data-toggle="datetimepicker" required autocomplete="off"/>
-                                    <div class="input-group-append" data-target="#bookingTime" data-toggle="datetimepicker">
-                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                    </div>
-                                </div> --}}
                             </div>
                             <div class="form-group">
                                 <label>Room Type</label>
-                                <select name="room_type" id="roomType" id="" class="form-control select2" required>
+                                <select name="room_type" id="roomType" class="form-control select2" required style="width: 100%">
                                     <option></option>
                                     @foreach ($room_types as $room_type)
                                         <option value="{{ $room_type->id }}">{{ $room_type->name }}</option>
@@ -33,8 +27,40 @@
                             </div>
                             <div class="form-group">
                                 <label>Room</label>
-                                <select name="room" id="rooms" class="form-control select2" required>
+                                <select name="room" id="rooms" class="form-control select2" required style="width: 100%">
+                                    <option></option>
                                 </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Proof of Identity</label>
+                                <div class="row justify-content-center">
+                                    <div class="form-group col-md-6">
+                                        <img id="img" width="100%" class="img-thumbnail" style="border: none; background-color: transparent" src="{{ asset('images/image-icon.png') }}" />
+                                        <label class="btn btn-primary btn-block">
+                                            Browse&hellip;<input value="" type="file" name="image" style="display: none;" id="upload" accept="image/png, image/jpeg" required/>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <legend>Room Info:</legend>
+                            <div id="roomInfo" style="display: none">
+                                <div class="form-group">
+                                    <img class="img-thumbnail" src="" alt="" id="roomImage">
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Name:</label>
+                                    <span id="roomName"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Description:</label>
+                                    <span id="roomDescription"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Amount:</label>
+                                    <span id="roomAmount"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -79,6 +105,36 @@
         });
     });
 
+    // Room Info
+    $('#rooms').on('change', function(){
+        var base_url = '{{ URL::to('') }}';
+        var id = $(this).val();
+        $.ajax({
+            type:'GET',
+            url: base_url+'/get_room_info/' + id,
+            /* data: {
+                room_id: id
+            }, */
+            success:function(data){
+                $('#roomImage').attr('src', data.room_image);
+                $('#roomName').html(data.room.name)
+                $('#roomDescription').html(data.room.description)
+                $('#roomAmount').html('₱ ' + data.room.amount + "/night")
+                $('#roomInfo').fadeIn()
+            },
+            error:function (data){
+                console.log('error')
+                Swal.fire({
+                    // position: 'top-end',
+                    type: 'error',
+                    title: 'error',
+                    showConfirmButton: false,
+                    toast: true
+                });
+            }
+        });
+    });
+
     $(function(){
         $('input[name="book_date"]').daterangepicker({
             // timePicker: true,
@@ -87,8 +143,37 @@
             minDate: "{{ date('Y-m-d h:i A') }}",
             // endDate: moment().startOf('hour').add(32, 'hour'),
             locale: {
-                format: 'Y-M-DD'
+                format: 'Y/M/DD'
             }
         });
+
+        // Clear room type, rooms, and room info when date is changed
+        $('input[name="book_date"]').change(function(){
+            $('#roomInfo').fadeOut();
+            $("#roomType").val('').trigger('change')
+            $('#rooms').html('<option></option>');
+            $('#rooms').select2({
+                placeholder: "Select",
+            });
+            $("#rooms").val('')
+        })
     })
+
+    // Image upload
+    $(function(){
+            $('#upload').change(function(){
+                var input = this;
+                var url = $(this).val();
+                var ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
+                if (input.files && input.files[0]&& (ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg")) 
+                {
+                    var reader = new FileReader();
+                    
+                    reader.onload = function (e) {
+                        $('#img').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            });
+        });
 </script>

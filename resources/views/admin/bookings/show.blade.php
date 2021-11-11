@@ -15,7 +15,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-6">
-            <legend>Booking Info</legend>
+                <legend>Booking Info</legend>
                 <div class="form-group">
                     <label>Booking Status:</label>
                     {!! $booking->getBookingStatus() !!}
@@ -46,6 +46,25 @@
                     <label>Contact #:</label>
                     {{ $booking->client->contact_number }}
                 </div>
+                <div class="form-group">
+                    <label>Proof of identity:</label>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#viewProofOfIdentity">View Image</button>
+                    <div class="modal fade" id="viewProofOfIdentity" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable modal-md" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Proof of Identity</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body text-center">
+                                    <img src="{{ asset($booking->proofOfIdentity()) }}" class="img-thumbnail">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-md-6">
                 <legend>Payment Info</legend>
@@ -61,7 +80,7 @@
                     <label>Balance:</label>
                     ₱ {{ number_format(($booking->amount-$booking->payments->sum('amount')), 2) }}
                 </div>
-                <div class="form-group">
+                {{--  <div class="form-group">
                     <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#bookingPayment" data-href="{{ route('payments.create', ['payment_method'=>'cash', 'booking_id'=>$booking->id]) }}" class="btn btn-primary">Add Payment</a>
                 </div>
                 <br>
@@ -88,7 +107,7 @@
                             </tr>
                         @endforelse
                     </tbody>
-                </table>
+                </table> --}}
             </div>
         </div>
     </div>
@@ -96,6 +115,7 @@
         <a class="btn btn-default" href="{{ route('admin.bookings.index') }}">
             {{ trans('global.back_to_list') }}
         </a>
+        <a class="btn btn-primary" href="{{ route('admin.bookings.edit', $booking->id) }}">Edit</a>
         @if($booking->booking_status == 'pending')
         <a class="btn btn-success" href="{{ route('admin.bookings.confirm', $booking->id) }}">Confirm Booking</a>
         <a class="btn btn-danger" href="{{ route('admin.bookings.cancel', $booking->id) }}">Cancel Booking</a>
@@ -105,17 +125,36 @@
         @endif
     </div>
 </div>
+@includeIf('admin.bookings.relationships.bookingPayments', ['payments' => $booking->payments])
+{{-- <div class="card">
+    <div class="card-header">
+        {{ trans('global.relatedData') }}
+    </div>
+    <ul class="nav nav-tabs" role="tablist" id="relationship-tabs">
+        <li class="nav-item">
+            <a class="nav-link" href="#booking_payments" role="tab" data-toggle="tab">
+                Payments
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane" role="tabpanel" id="booking_payments">
+            @includeIf('admin.bookings.relationships.bookingPayments', ['payments' => $booking->payments])
+        </div>
+    </div>
+</div> --}}
+
 <div id="modalAjax"></div>
 <div id="modalOpenData"></div>
 @endsection
 @section('scripts')
 <script>
     $(function(){
-        $.ajaxSetup({
+        /* $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
-        });
+        }); */
         // Modal Ajax
         $(document).on('click', '[data-toggle="modal-ajax"]', function(){
             $('#loader').show();
@@ -132,6 +171,9 @@
                 }
             }
             $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 type: 'GET',
                 url: href,
                 data: data,

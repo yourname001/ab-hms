@@ -68,7 +68,7 @@
                         {{ Auth::user()->first_name }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Settings</a>
+                        <a class="dropdown-item" href="{{ route('client.account', Auth::user()->id) }}">Account</a>
                         <a class="dropdown-item" href="#logout" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">Logout</a>
                     </div>
                 </li>
@@ -238,6 +238,16 @@
 
     @include('partials.scripts')
     @yield('scripts')
-      
+
+    {{-- Backdrop for dual modal --}}
+    <script>
+        $(document).on('show.bs.modal', '.modal', function () {
+            var zIndex = 1040 + (10 * $('.modal:visible').length);
+            $(this).css('z-index', zIndex);
+            setTimeout(function() {
+                $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+            }, 0);
+        });
+    </script>
     </body>
   </html>
