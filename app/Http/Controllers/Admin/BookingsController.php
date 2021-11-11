@@ -307,6 +307,15 @@ class BookingsController extends Controller
         return redirect()->route('admin.bookings.show', $booking->id);
     }
 
+    public function checkOut(Booking $booking)
+    {
+        $booking->update([
+            'booking_status' => 'checked out'
+        ]);
+
+        return redirect()->route('admin.bookings.show', $booking->id);
+    }
+
     public function cancel(Booking $booking)
     {
         $booking->update([

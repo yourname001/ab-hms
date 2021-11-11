@@ -123,6 +123,9 @@
         <a class="btn btn-success" href="{{ route('admin.bookings.check_in', $booking->id) }}">Client Checked In</a>
         <a class="btn btn-danger" href="{{ route('admin.bookings.cancel', $booking->id) }}">Cancel Booking</a>
         @endif
+        @if($booking->booking_status == 'checked in')
+        <a class="btn btn-primary" href="{{ route('admin.bookings.checkout', $booking->id) }}">Check Out</a>
+        @endif
     </div>
 </div>
 @includeIf('admin.bookings.relationships.bookingPayments', ['payments' => $booking->payments])

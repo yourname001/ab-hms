@@ -64,6 +64,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('print-booking-report', 'BookingsController@printReport')->name('bookings.print_report');
     Route::get('bookings/confirm/{booking}', 'BookingsController@confirm')->name('bookings.confirm');
     Route::get('bookings/check-in/{booking}', 'BookingsController@checkIn')->name('bookings.check_in');
+    Route::get('bookings/check-out/{booking}', 'BookingsController@checkOut')->name('bookings.checkout');
     Route::get('bookings/cancel/{booking}', 'BookingsController@cancel')->name('bookings.cancel');
 
     // payments

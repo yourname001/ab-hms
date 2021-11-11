@@ -72,6 +72,9 @@ class Booking extends Model
             case 'checked in':
                 $status = '<span class="badge badge-success">Checked In</span>';
                 break;
+            case 'checked out':
+                $status = '<span class="badge badge-secondary">Checked Out</span>';
+                break;
             case 'canceled':
                 $status = '<span class="badge badge-danger">Canceled</span>';
                 break;
