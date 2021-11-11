@@ -135,7 +135,14 @@
                     <td>
                         {{ date('Y-m-d', strtotime($booking->booking_date_to)) }}
                     </td>
-                    <td></td>
+                    <td>
+                        {{ view('partials.datatablesActions', [
+                            'viewGate' => 'booking_show',
+                        'editGate' => 'booking_edit',
+                        'deleteGate' => 'booking_delete',
+                        'crudRoutePart' => 'bookings',
+                        'row' => $booking])}}
+                    </td>
                 </tr>
                 @empty
                 @endforelse
