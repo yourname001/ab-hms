@@ -11,10 +11,10 @@ class UsersTableSeeder extends Seeder
     {
 
         $admin = User::create([
-            'first_name'     => 'Kyouma',
-            'last_name'      => 'Hououin',
-            'contact_number' => '09673700020',
-            'address'        => 'Area 51',
+            'first_name'     => 'Madara',
+            'last_name'      => 'Uchiha',
+            'contact_number' => '09123456789',
+            'address'        => 'Hidden Leaf Village',
             'email'          => 'qatarafamilyresort.69@gmail.com',
             'email_verified_at' => Carbon::now(),
             'password'       => bcrypt('password'),
@@ -22,9 +22,9 @@ class UsersTableSeeder extends Seeder
         ]);
 
         $client = User::create([
-            'first_name'     => 'John',
-            'last_name'      => 'Doe',
-            'contact_number' => '09123456789',
+            'first_name'     => 'Kyouma',
+            'last_name'      => 'Hououin',
+            'contact_number' => '09321654987',
             'address'        => 'Tokyo, Japan',
             'email'          => 'hououinkyouma.000001@gmail.com',
             'email_verified_at' => Carbon::now(),
