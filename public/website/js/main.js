@@ -64,6 +64,8 @@
 
 	var carousel = function() {
 		$('.home-slider').owlCarousel({
+		touchDrag  : false,
+		mouseDrag  : false,
 	    loop:true,
 	    autoplay: true,
 	    margin:0,
@@ -134,7 +136,7 @@
 	};
 	carousel();
 
-	$('nav .dropdown').hover(function(){
+	/* $('nav .dropdown').click(function(){
 		var $this = $(this);
 		// 	 timer;
 		// clearTimeout(timer);
@@ -151,12 +153,7 @@
 			// $this.find('.dropdown-menu').removeClass('animated-fast fadeInUp show');
 			$this.find('.dropdown-menu').removeClass('show');
 		// }, 100);
-	});
-
-
-	$('#dropdown04').on('show.bs.dropdown', function () {
-	  console.log('show');
-	});
+	}); */
 
 	// scroll
 	var scrollWindow = function() {

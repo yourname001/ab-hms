@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
 
     {{-- <link rel="stylesheet" href="{{ asset('bootstrap-4.3.1/css/bootstrap.min.css') }}"> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('website/css/bootstrap.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('website/css/open-iconic-bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('website/css/animate.css') }}">
     
@@ -46,42 +47,42 @@
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
         <div class="container">
             <a class="navbar-brand" href="/">Qatara Family Resort</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="oi oi-menu"></span> Menu
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="oi oi-menu"></span> Menu
             </button>
-            <div class="collapse navbar-collapse" id="ftco-nav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
-                @auth
-                @if (!is_null(Auth::user()->email_verified_at))
-                <li class="nav-item"><a href="{{ route('client_bookings.index') }}" class="nav-link">Booking</a></li>
-                @endif
-                @endauth
-                {{-- <li class="nav-item"><a href="restaurant.html" class="nav-link">Restaurant</a></li> --}}
-                {{-- <li class="nav-item"><a href="#" class="nav-link">About</a></li> --}}
-                {{-- <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li> --}}
-                {{-- <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li> --}}
-                @auth
-                @if(!is_null(Auth::user()->email_verified_at))
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {{ Auth::user()->first_name }}
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="{{ route('client.account', Auth::user()->id) }}">Account</a>
-                        <a class="dropdown-item" href="#logout" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">Logout</a>
-                    </div>
-                </li>
-                @else
-                <li class="nav-item">
-                    <a href="#verify-email" class="nav-link badge badge-warning">Email not verified</a>
-                </li>
-                @endif
-                {{-- <li class="nav-item"><a href="javascript:void(0)" data-toggle="modal-ajax" data-target="login" data-href="{{ route('client.login') }}" class="nav-link">{{ Auth::user()->first_name }}</a></li> --}}
-                @else
-                <li class="nav-item"><a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#login" data-href="{{ route('client.login') }}" class="nav-link">Login</a></li>
-                @endauth
-            </ul>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+                    @auth
+                    @if (!is_null(Auth::user()->email_verified_at))
+                    <li class="nav-item"><a href="{{ route('client_bookings.index') }}" class="nav-link">Booking</a></li>
+                    @endif
+                    @endauth
+                    {{-- <li class="nav-item"><a href="restaurant.html" class="nav-link">Restaurant</a></li> --}}
+                    {{-- <li class="nav-item"><a href="#" class="nav-link">About</a></li> --}}
+                    {{-- <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li> --}}
+                    {{-- <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li> --}}
+                    @auth
+                    @if(!is_null(Auth::user()->email_verified_at))
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" role="button" href="#" id="accountMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ Auth::user()->first_name }}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="accountMenu">
+                            <a class="dropdown-item" href="{{ route('client.account', Auth::user()->id) }}">Account</a>
+                            <a class="dropdown-item" href="#logout" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">Logout</a>
+                        </div>
+                    </li>
+                    @else
+                    <li class="nav-item">
+                        <a href="#verify-email" class="nav-link badge badge-warning">Email not verified</a>
+                    </li>
+                    @endif
+                    {{-- <li class="nav-item"><a href="javascript:void(0)" data-toggle="modal-ajax" data-target="login" data-href="{{ route('client.login') }}" class="nav-link">{{ Auth::user()->first_name }}</a></li> --}}
+                    @else
+                    <li class="nav-item"><a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#login" data-href="{{ route('client.login') }}" class="nav-link">Login</a></li>
+                    @endauth
+                </ul>
             </div>
         </div>
     </nav>
@@ -172,21 +173,38 @@
         @endforelse
     </div>
     @if (count($errors) > 0)
-        <div style="position: absolute; top: 0; right: 0; z-index: 1111">
+        {{-- <div style="position: absolute; top: 0; right: 0; z-index: 1111">
             <div class="toast" data-autohide="false" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-header">
-                    {{-- <img src="..." class="rounded mr-2" alt="..."> --}}
                     <strong class="mr-auto text-danger">Whoops!</strong>
-                    {{-- <small class="text-muted">11 mins ago</small> --}}
                     <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
                 </div>
                 <div class="toast-body">
-                    {{-- There were some problems with your input. --}}
                     <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                     </ul>
+                </div>
+            </div>
+        </div> --}}
+        <div class="modal fade" id="formValidationError" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="DoctorsNotes" aria-hidden="true">
+            <div class="modal-dialog modal-md modal-dialog-scrollable modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title text-danger"><i class="fad fa-exclamation-triangle"></i> Error</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                        </ul>
+                    </div>
+                    <div class="modal-footer text-right">
+                        <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -218,10 +236,11 @@
   
   
     <script src="{{ asset('website/js/jquery.min.js') }}"></script>
+    {{-- <script src="{{ asset('website/js/jquery-3.2.1.min.js') }}"></script> --}}
     <script src="{{ asset('website/js/jquery-migrate-3.0.1.min.js') }}"></script>
+    {{-- <script src="{{ asset('bootstrap-4.3.1/js/bootstrap.bundle.min.js') }}"></script> --}}
     <script src="{{ asset('website/js/popper.min.js') }}"></script>
-    {{-- <script src="{{ asset('website/js/bootstrap.min.js') }}"></script> --}}
-    <script src="{{ asset('bootstrap-4.3.1/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('website/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('website/js/jquery.easing.1.3.js') }}"></script>
     <script src="{{ asset('website/js/jquery.waypoints.min.js') }}"></script>
     <script src="{{ asset('website/js/jquery.stellar.min.js') }}"></script>

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Auth;
+use App\Mail\SendBookingConfirmationMail;
 
 class BookingController extends Controller
 {
@@ -62,7 +63,8 @@ class BookingController extends Controller
         $request->validate([
             'book_date' => 'required',
             'room_type' => 'required',
-            'room' => 'required'
+            'room' => 'required',
+            'proof_of_identity' => 'required|image|mimes:jpeg,png,jpg',
         ]);
 
         $room = Room::find($request->get('room'));
@@ -75,8 +77,6 @@ class BookingController extends Controller
         $date_from = Carbon::createFromDate($book_from);
 
         $days = $date_from->diffInDays($book_to);
-
-
         $amount = $amount * $days;
 
         $booking = Booking::create([
@@ -85,12 +85,14 @@ class BookingController extends Controller
             'room_id' => $request->get('room'),
             'user_id' => Auth::user()->id,
             'amount' => $amount,
-            'booking_date_from' => $book_date[0],
-            'booking_date_to' => $book_date[1],
+            'booking_date_from' => $book_from,
+            'booking_date_to' => $book_to,
         ]);
 
-        if($request->file('image')){
-            $image = $request->file('image');
+        Mail::to($booking->client->email)->send(new SendBookingConfirmationMail($booking));
+
+        if($request->file('proof_of_identity')){
+            $image = $request->file('proof_of_identity');
             $storagePath = 'images/user';
             $fileName = $booking->id . '_' . date('m-d-Y H.i.s') . '.' . $image->getClientOriginalExtension();
             Storage::disk('upload')->putFileAs('images/proof-of-identity/', $image, $fileName);
@@ -99,7 +101,7 @@ class BookingController extends Controller
             ]);
         }
         
-        return redirect()->route('client_bookings.index');
+        return redirect()->route('client_bookings.index')->with('alert-success', 'Booking Success');
 
     }
 

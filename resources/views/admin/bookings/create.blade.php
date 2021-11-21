@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="required" for="booking_date">Booking Date</label>
+                        <label class="required" for="booking_date">Booking Date (Check in/Check out date and time)</label>
                         <input type="text" class="form-control" name="book_date" id="bookDate">
                         @if($errors->has('book_date'))
                             <div class="invalid-feedback">

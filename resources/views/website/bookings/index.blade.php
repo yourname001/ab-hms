@@ -55,7 +55,7 @@
             <div class="col-md-9 ftco-animate text-center d-flex align-items-end justify-content-center">
                 <div class="text">
                     {{-- <p class="breadcrumbs mb-2"><span class="mr-2"><a href="index.html">Home</a></span> <span>About</span></p> --}}
-                    <h1 class="mb-4 bread">Rooms</h1>
+                    <h1 class="mb-4 bread">Booking</h1>
                 </div>
             </div>
         </div>
@@ -188,11 +188,12 @@
                          container: "body"
                      })
                 },*/
-                eventTimeFormat: {
+                /* eventTimeFormat: {
                     hour           : 'numeric',
                     minute         : '2-digit',
                     meridiem       : 'short',
-                },
+                }, */
+                displayEventTime: false,
                 events: [
                 @foreach ($bookings as $booking)
                     {
@@ -203,11 +204,11 @@
                         @endif
                         description    : 'description for All Day Event',
                         start          : '{{ $booking->booking_date_from }}',
-                        end            : '{{ $booking->booking_date_to }}',
+                        end            : '{{ date("Y-m-d", strtotime($booking->booking_date_to)) }} 24:00:00',
                         dataTarget     : '#showBooking',
                         dataHref       : '{{ route('client_bookings.show', $booking->id) }}',
                         formAction     : '{{ route('client_bookings.update', $booking->id) }}',
-                        allDay         : false,
+                        allDay         : true,
                         @if($booking->booking_status == 'pending')
                         backgroundColor: '#ffc107', //color: warning
                         borderColor    : '#ffc107', //color: warning
@@ -219,7 +220,7 @@
                         backgroundColor: '#28a745', //color: success
                         borderColor    : '#28a745', //color: success
                         textColor      : '#fff',
-                        @elseif($booking->booking_status == 'canceled' || $booking->booking_status == 'expired')
+                        @elseif($booking->booking_status == 'canceled' || $booking->booking_status == 'expired' || $booking->booking_status == 'decline')
                         backgroundColor: '#dc3545', //color: danger
                         borderColor    : '#dc3545', //color: danger
                         textColor      : '#fff',

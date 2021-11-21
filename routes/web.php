@@ -66,6 +66,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('bookings/check-in/{booking}', 'BookingsController@checkIn')->name('bookings.check_in');
     Route::get('bookings/check-out/{booking}', 'BookingsController@checkOut')->name('bookings.checkout');
     Route::get('bookings/cancel/{booking}', 'BookingsController@cancel')->name('bookings.cancel');
+    Route::post('bookings/decline/{booking}', 'BookingsController@decline')->name('bookings.decline');
 
     // payments
     Route::delete('payments/destroy', 'PaymentsController@massDestroy')->name('payments.massDestroy');

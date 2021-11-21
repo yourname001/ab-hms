@@ -180,7 +180,7 @@
         })
 
         // form validation info
-        $('.toast').toast('show')
+        $('#formValidationError').modal('show')
     // })
 </script>
 

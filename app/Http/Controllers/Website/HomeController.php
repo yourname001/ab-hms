@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\RoleUser;
 use Illuminate\Support\Facades\Hash;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -20,11 +21,24 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $data = ([
-            'featuredRooms' => Room::where('featured', '1')->whereNotNull('image')->get(),
-            'roomTypes' => RoomType::pluck('name', 'id')
-        ]);
-        return view('website.index', $data);
+        
+        if(isset(Auth::user()->id)){
+            if(Auth::user()->getIsAdminAttribute()){
+                return redirect()->route('admin.home');
+            }else{
+                $data = ([
+                    'featuredRooms' => Room::where('featured', '1')->whereNotNull('image')->get(),
+                    'roomTypes' => RoomType::pluck('name', 'id')
+                ]);
+                return view('website.index', $data);
+            }
+        }else{
+            $data = ([
+                'featuredRooms' => Room::where('featured', '1')->whereNotNull('image')->get(),
+                'roomTypes' => RoomType::pluck('name', 'id')
+            ]);
+            return view('website.index', $data);
+        }
     }
 
     public function login()

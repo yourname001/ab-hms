@@ -51,7 +51,7 @@ class PaymentController extends Controller
         $request->validate([
 			'booking_id' => 'required',
 			'payment_method' => 'required',
-			// 'proof_of_payment' => 'required',
+            'proof_of_payment' => 'required|image|mimes:jpeg,png,jpg',
         ]);
         if(Booking::where('id', $request->get('booking_id'))){
             $booking = Booking::find($request->get('booking_id'));

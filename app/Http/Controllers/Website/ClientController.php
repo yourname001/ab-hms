@@ -41,6 +41,9 @@ class ClientController extends Controller
             }
         }
         if($request->file('image')){
+            $request->validate([
+                'image' => 'required|image|mimes:jpeg,png,jpg'
+            ]);
             $avatar= $request->file('image');
             $thumbnailImage = Image::make($avatar);
 

@@ -78,6 +78,9 @@ class Booking extends Model
             case 'canceled':
                 $status = '<span class="badge badge-danger">Canceled</span>';
                 break;
+            case 'declined':
+                $status = '<span class="badge badge-danger">Declined</span>';
+                break;
             case 'expired':
                 $status = '<span class="badge badge-danger">Expired</span>';
                 break;

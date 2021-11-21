@@ -1,7 +1,7 @@
 <form action="{{ route('client_bookings.store') }}" method="POST" autocomplete="off" enctype="multipart/form-data">
     @csrf
     <div class="modal fade" id="addBooking" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-dialog modal-md modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Add Booking</h5>
@@ -12,8 +12,9 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col">
+                            {{-- <strong class="text-danger">Business hours is from 8:00AM to 5:00PM</strong> --}}
                             <div class="form-group">
-                                <label>Date</label>
+                                <label>Booking Date (Check in/Check out date)</label>
                                 <input type="text" class="form-control" name="book_date" id="bookDate" {{-- value="{{ $book_date }}" --}}>
                             </div>
                             <div class="form-group">
@@ -37,13 +38,15 @@
                                     <div class="form-group col-md-6">
                                         <img id="img" width="100%" class="img-thumbnail" style="border: none; background-color: transparent" src="{{ asset('images/image-icon.png') }}" />
                                         <label class="btn btn-primary btn-block">
-                                            Browse&hellip;<input value="" type="file" name="image" style="display: none;" id="upload" accept="image/png, image/jpeg" required/>
+                                            Browse&hellip;<input value="" type="file" name="proof_of_identity" style="display: none;" id="upload" accept="image/png, image/jpeg" required/>
                                         </label>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                    </div>
+                    <div class="row">
+                        <div class="col">
                             <legend>Room Info:</legend>
                             <div id="roomInfo" style="display: none">
                                 <div class="form-group">
@@ -140,12 +143,14 @@
             // timePicker: true,
             startDate: '{{ $date_from }}',
             endDate: '{{ $date_to }}',
-            minDate: "{{ date('Y-m-d h:i A') }}",
+            minDate: "{{ date('Y/m/d h:i A') }}",
             // endDate: moment().startOf('hour').add(32, 'hour'),
             locale: {
                 format: 'Y/M/DD'
             }
         });
+
+        $('.drp-calendar .right').find('.calendar-time').fadeOut();
 
         // Clear room type, rooms, and room info when date is changed
         $('input[name="book_date"]').change(function(){

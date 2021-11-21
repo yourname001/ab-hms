@@ -19,6 +19,7 @@ class RoomsController extends Controller
 {
     public function index(Request $request)
     {
+        abort_if(Gate::denies('room_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         if ($request->ajax()) {
             $query = Room::with(['room_type'])->select(sprintf('%s.*', (new Room)->table));
             $table = Datatables::of($query);
@@ -80,6 +81,7 @@ class RoomsController extends Controller
 
     public function store(StoreRoomRequest $request)
     {
+        abort_if(Gate::denies('room_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         // $room = Room::create($request->all());
 
         $request->validate([
@@ -115,7 +117,7 @@ class RoomsController extends Controller
 
     public function edit(Room $room)
     {
-        // abort_if(Gate::denies('room_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('room_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         // $hotels = Hotel::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
@@ -137,6 +139,8 @@ class RoomsController extends Controller
 
     public function update(Request $request, Room $room)
     {
+        abort_if(Gate::denies('room_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $request->validate([
 			'room_type_id' => 'required',
 			'name' => 'required',

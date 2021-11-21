@@ -2,22 +2,17 @@
 
 namespace App\Mail;
 
-use App\Models\Booking;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use App\Models\Booking;
 
-class SendBookingConfirmationMail extends Mailable
+class DeclineBooking extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * The booking instance.
-     *
-     * @var \App\Models\Booking
-     */
-    public $booking;
+    protected $booking;
 
     /**
      * Create a new message instance.
@@ -39,7 +34,7 @@ class SendBookingConfirmationMail extends Mailable
         $data = [
             'booking' => $this->booking
         ];
-        return $this->subject('Booking Confirmation')
-                    ->view('mails.booking_confirmation', $data);
+        return $this->subject('Booking Declined')
+                    ->view('mails.decline_booking', $data);
     }
 }

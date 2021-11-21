@@ -5,25 +5,28 @@
 </head>
 <body>
     <h1>Booking</h1>
-    <p>You booked a room in Qatara Family Resort.</p>
+    <p>You booked a room in Qatara Family Resort. Please pay the required reservation fee and wait for the confirmation of your booking.</p>
     <label>Details:</label>
     <ul style="list-style-type: none">
         <li>
-            <label>Date: </label>
-            {{ date("f d, Y h:i A", strtotime($booking->boooking_date_from)) }}
+            <b>Date: </b>
+            {{ date("F d, Y", strtotime($booking->booking_date_from)) }}
             -
-            {{ date("f d, Y h:i A", strtotime($booking->boooking_date_to)) }}
+            {{ date("F d, Y", strtotime($booking->booking_date_to)) }}
         </li>
         <li>
-            <label>Room: </label>
+            <b>Room: </b>
             {{ $booking->room->name }}
         </li>
         <li>
-            <label>Amount: </label>
-            {{ $booking->amount }}
+            <b>Amount: </b>
+            ₱{{ number_format($booking->amount, 2) }}
+        </li>
+        <li>
+            <b>Required Reservation Fee (30% of total amount):</b>
+            ₱ {{ number_format(($booking->amount * 0.3), 2) }}
         </li>
     </ul>
-   
-    <p>Thank you</p>
+    <p>Thank you for choosing <a href="{{ config('app.url') }}">Qatara Family Resort</a></p>
 </body>
 </html>

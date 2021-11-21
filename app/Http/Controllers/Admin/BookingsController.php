@@ -16,11 +16,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\DeclineBooking;
 
 class BookingsController extends Controller
 {
     public function index(Request $request)
     {
+        abort_if(Gate::denies('booking_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         if ($request->ajax()) {
             $bookings = Booking::with(['room', 'client'=>function($q){
                 $q->select([
@@ -166,6 +169,7 @@ class BookingsController extends Controller
 
     public function store(Request $request)
     {
+        abort_if(Gate::denies('booking_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $request->validate([
             'client' => 'required',
             'book_date' => 'required',
@@ -234,6 +238,7 @@ class BookingsController extends Controller
 
     public function update(Request $request, Booking $booking)
     {
+        abort_if(Gate::denies('booking_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $request->validate([
             'client' => 'required',
             'book_date' => 'required',
@@ -320,6 +325,19 @@ class BookingsController extends Controller
     {
         $booking->update([
             'booking_status' => 'canceled'
+        ]);
+
+        return redirect()->route('admin.bookings.show', $booking->id);
+    }
+
+    public function decline(Request $request, Booking $booking)
+    {
+
+        Mail::to($booking->client->email)->send(new DeclineBooking($booking));
+
+        $booking->update([
+            'booking_status' => 'declined',
+            'decline_reason' => $request->decline_reason
         ]);
 
         return redirect()->route('admin.bookings.show', $booking->id);

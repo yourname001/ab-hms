@@ -23,9 +23,9 @@
                             <br>
                             @endif
                             <label>Book Date:</label>
-                            {{ date('F d, Y', strtotime($booking_show->booking_date_from)) }}
+                            {{ date('F d, Y h:i A', strtotime($booking_show->booking_date_from)) }}
                             -
-                            {{ date('F d, Y', strtotime($booking_show->booking_date_to)) }}
+                            {{ date('F d, Y h:i A', strtotime($booking_show->booking_date_to)) }}
                             <br>
                             <label>Room Type:</label>
                             {{ $booking_show->room->room_type->name }}

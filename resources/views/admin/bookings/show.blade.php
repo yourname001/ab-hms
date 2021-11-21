@@ -11,7 +11,6 @@
     <div class="card-header">
         {{ trans('global.show') }} {{ trans('cruds.booking.title') }}
     </div>
-
     <div class="card-body">
         <div class="row">
             <div class="col-md-6">
@@ -22,9 +21,13 @@
                 </div>
                 <div class="form-group">
                     <label>Booking Date:</label>
-                    {{ date('F d, Y', strtotime($booking->booking_date_from)) }}
+                    {{ date('F d, Y  h:i A', strtotime($booking->booking_date_from)) }}
                     -
-                    {{ date('F d, Y', strtotime($booking->booking_date_to)) }}
+                    {{ date('F d, Y  h:i A', strtotime($booking->booking_date_to)) }}
+                </div>
+                <div class="form-group">
+                    <label>Required Reservation Fee (30% of total amount):</label>
+                    ₱ {{ number_format(($booking->amount * 0.3), 2) }}
                 </div>
                 <div class="form-group">
                     <label>Amount:</label>
@@ -119,6 +122,8 @@
         @if($booking->booking_status == 'pending')
         <a class="btn btn-success" href="{{ route('admin.bookings.confirm', $booking->id) }}">Confirm Booking</a>
         <a class="btn btn-danger" href="{{ route('admin.bookings.cancel', $booking->id) }}">Cancel Booking</a>
+        {{-- <a class="btn btn-danger" href="{{ route('admin.bookings.decline', $booking->id) }}">Decline Booking</a> --}}
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#declineBookingModal">Decline Booking</button>
         @elseif($booking->booking_status == 'confirmed')
         <a class="btn btn-success" href="{{ route('admin.bookings.check_in', $booking->id) }}">Client Checked In</a>
         <a class="btn btn-danger" href="{{ route('admin.bookings.cancel', $booking->id) }}">Cancel Booking</a>
@@ -128,6 +133,7 @@
         @endif
     </div>
 </div>
+
 @includeIf('admin.bookings.relationships.bookingPayments', ['payments' => $booking->payments])
 {{-- <div class="card">
     <div class="card-header">
@@ -149,6 +155,43 @@
 
 <div id="modalAjax"></div>
 <div id="modalOpenData"></div>
+
+@if($booking->booking_status == 'pending')
+<form action="{{ route('admin.bookings.decline', $booking->id) }}" method="POST">
+    @csrf
+    <div class="modal fade" id="declineBookingModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Decline Booking</h5>
+                    <button type="button" class="close" data-dismiss="modal-ajax" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="">Reason</label>
+                                <select class="form-control" name="decline_reason" id="">
+                                    <option value="">-- select --</option>
+                                    <option value="Unclarify indentity">Unclarified indentity</option>
+                                    <option value="Unclarify indentity">Fully booked</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal-ajax">Cancel</button>
+                    {{-- <a class="btn btn-danger" href="{{ route('admin.bookings.decline', $booking->id) }}">Decline Booking</a> --}}
+                    <button class="btn btn-danger" type="submit"> Decline Booking</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@endif
 @endsection
 @section('scripts')
 <script>

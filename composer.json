@@ -12,11 +12,12 @@
         "bugsnag/bugsnag-laravel": "^2.17",
         "doctrine/dbal": "^2.9",
         "fideloper/proxy": "^4.0",
+        "guzzlehttp/guzzle": "7.*",
         "intervention/image": "^2.7",
         "laravel/framework": "^6.2",
-        "laravel/passport": "^7.4",
         "laravel/telescope": "3.0",
         "laravel/tinker": "^1.0",
+        "wildbit/swiftmailer-postmark": "^3.3",
         "yajra/laravel-datatables-oracle": "^9.7"
     },
     "require-dev": {
