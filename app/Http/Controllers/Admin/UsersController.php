@@ -11,6 +11,7 @@ use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Carbon\Carbon;
 
 class UsersController extends Controller
 {
@@ -32,7 +33,7 @@ class UsersController extends Controller
         return view('admin.users.create', compact('roles'));
     }
 
-    public function store(StoreUserRequest $request)
+    public function store(Request $request)
     {
         $user = User::create([
             'first_name' => $request->get('first_name'),
@@ -40,6 +41,7 @@ class UsersController extends Controller
             'contact_number' => $request->get('contact_number'),
             'address' => $request->get('address'),
             'email' => $request->get('email'),
+            'email_verified_at' => Carbon::now(),
             'password' => $request->get('password'),
         ]);
         $user->roles()->sync($request->input('roles', []));
@@ -58,10 +60,20 @@ class UsersController extends Controller
         return view('admin.users.edit', compact('roles', 'user'));
     }
 
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(Request $request, User $user)
     {
-        $user->update($request->all());
+        $user->update([
+            'first_name' => $request->get('first_name'),
+            'last_name' => $request->get('last_name'),
+            'contact_number' => $request->get('contact_number'),
+            'address' => $request->get('address'),
+            'email' => $request->get('email'),
+            'email_verified_at' => Carbon::now(),
+            'password' => $request->get('password'),
+        ]);
         $user->roles()->sync($request->input('roles', []));
+
+        return redirect()->route('admin.users.index');
 
         return redirect()->route('admin.users.index');
     }

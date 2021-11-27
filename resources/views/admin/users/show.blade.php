@@ -25,10 +25,34 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.user.fields.name') }}
+                            First Name
                         </th>
                         <td>
-                            {{ $user->name }}
+                            {{ $user->first_name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Last Name
+                        </th>
+                        <td>
+                            {{ $user->last_name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Contact #
+                        </th>
+                        <td>
+                            {{ $user->contact_number }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Address
+                        </th>
+                        <td>
+                            {{ $user->address }}
                         </td>
                     </tr>
                     <tr>
