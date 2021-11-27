@@ -79,9 +79,10 @@
             $('#email-error').html("");
             $('#password-error').html("");
             $('#password_confirmation-error').html("");
+            var appURL = '{{ config("app.url") }}'
             $.ajax({
                 type:'POST',
-                url:'/register',
+                url: appURL + '/register',
                 data: {
                     first_name: $('#first_name').val(),
                     last_name: $('#last_name').val(),

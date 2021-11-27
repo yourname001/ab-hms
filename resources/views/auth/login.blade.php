@@ -74,9 +74,10 @@
                 }
             });
             $("#error-msg").html("");
+            var appURL = '{{ config("app.url") }}'
             $.ajax({
                 type:'POST',
-                url:'/login',
+                url: appURL+'/login',
                 data: {
                     email: $('#email').val(),
                     password: $('#password').val()
