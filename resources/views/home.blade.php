@@ -15,7 +15,7 @@
                         <div class="col-lg-3 col-6">
                             <div class="small-box bg-warning">
                                 <div class="inner">
-                                    <h3>{{ $pending_bookings }}</h3>
+                                    <h3>{{ $pending_bookings ?? '0' }}</h3>
                                     <p>Pending Bookings</p>
                                 </div>
                                 <div class="icon">
@@ -27,7 +27,7 @@
                         <div class="col-lg-3 col-6">
                             <div class="small-box bg-primary">
                                 <div class="inner">
-                                    <h3>{{ $confirmed_bookings }}</h3>
+                                    <h3>{{ $confirmed_bookings ?? '0' }}</h3>
                                     <p>Confirmed Bookings</p>
                                 </div>
                                 <div class="icon">
@@ -39,7 +39,7 @@
                         <div class="col-lg-3 col-6">
                             <div class="small-box bg-success">
                                 <div class="inner">
-                                    <h3>{{ $checked_in_bookings }}</h3>
+                                    <h3>{{ $checked_in_bookings ?? '0' }}</h3>
                                     <p>Checked In Bookings</p>
                                 </div>
                                 <div class="icon">
@@ -51,7 +51,7 @@
                         <div class="col-lg-3 col-6">
                             <div class="small-box bg-info">
                                 <div class="inner">
-                                    <h3>{{ $unpaid_bookings }}</h3>
+                                    <h3>{{ $unpaid_bookings ?? '0' }}</h3>
                                     <p>Unpaid Bookings</p>
                                 </div>
                                 <div class="icon">
