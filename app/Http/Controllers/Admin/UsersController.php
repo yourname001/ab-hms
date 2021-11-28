@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\MassDestroyUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -42,7 +43,7 @@ class UsersController extends Controller
             'address' => $request->get('address'),
             'email' => $request->get('email'),
             'email_verified_at' => Carbon::now(),
-            'password' => $request->get('password'),
+            'password' => Hash::make($request->get('password')),
         ]);
         $user->roles()->sync($request->input('roles', []));
 

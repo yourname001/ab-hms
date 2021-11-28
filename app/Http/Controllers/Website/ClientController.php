@@ -30,11 +30,12 @@ class ClientController extends Controller
             'password' => Hash::make($request->get('password'))
         ]); */
         if(!is_null($request->get('old_password'))){
-            if(Hash::check($request->get('new_password'), $user->password)){
+            if(Hash::check($request->get('old_password'), $user->password)){
                 $request->validate([
                     'old_password' => 'required',
                     'new_password' => 'confirmed|min:8|different:old_password'
                 ]);
+                
                 $user->update([
                     'password' => Hash::make($request->get('new_password'))
                 ]);
