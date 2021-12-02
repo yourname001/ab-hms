@@ -19,6 +19,21 @@
                     <label>Booking Status:</label>
                     {!! $booking->getBookingStatus() !!}
                 </div>
+                @if($booking->booking_status == 'declined')
+                <div class="form-group">
+                    <label>Decline Reason:</label>
+                    {{ $booking->decline_reason }}
+                </div>
+                @elseif($booking->booking_status == 'canceled')
+                <div class="form-group">
+                    <label>Reason of cancellation:</label>
+                    {{ $booking->reason_of_cancellation }}
+                </div>
+                <div class="form-group">
+                    <label>Other Reasons:</label>
+                    {{ $booking->other_reasons }}
+                </div>
+                @endif
                 <div class="form-group">
                     <label>Booking Date:</label>
                     {{ date('F d, Y  h:i A', strtotime($booking->booking_date_from)) }}
@@ -48,6 +63,10 @@
                 <div class="form-group">
                     <label>Contact #:</label>
                     {{ $booking->client->contact_number }}
+                </div>
+                <div class="form-group">
+                    <label>Type of Identification:</label>
+                    {{ $booking->type_of_identification }}
                 </div>
                 <div class="form-group">
                     <label>Proof of identity:</label>

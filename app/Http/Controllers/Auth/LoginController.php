@@ -56,7 +56,7 @@ class LoginController extends Controller
                     return redirect()->route('resort.index');
                 }
             }
-            elseif(Auth::user()->roles()->where('id', 1)->exists()){
+            else{
                 if($request->ajax()){
                     return response()->json([
                         'redirect' => route('admin.home')

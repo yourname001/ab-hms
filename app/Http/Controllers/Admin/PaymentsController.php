@@ -72,7 +72,7 @@ class PaymentsController extends Controller
                 // 'pay_with_cash' => request()->get('pay_with_cash')
             ];
             return response()->json([
-                'modal_content' => view('website.payments.create', $data)->render()
+                'modal_content' => view('admin.payments.create', $data)->render()
             ]);
         }
     }

@@ -10,6 +10,7 @@ class CreateBookingsTable extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('type_of_identification')->nullable();
             $table->string('proof_of_identity')->nullable();
             $table->unsignedBigInteger('room_id');
             $table->foreign('room_id')
@@ -25,12 +26,12 @@ class CreateBookingsTable extends Migration
             $table->timestamp('booking_date_to')->nullable();
             $table->integer('amount')->default(0)->nullable();
             $table->enum('payment_status', ['unpaid', 'partial', 'paid']);
-            $table->enum('booking_status', ['pending', 'reserved', 'confirmed', 'checked in', 'checked out', 'canceled', 'expired', 'decline']);
+            $table->enum('booking_status', ['pending', 'reserved', 'confirmed', 'checked in', 'checked out', 'canceled', 'expired', 'declined']);
             $table->string('reason_of_cancellation')->nullable();
             $table->string('other_reasons')->nullable();
             $table->string('decline_reason')->nullable();
             $table->timestamps();
-            $table->softDeletes();
+            
         });
     }
 

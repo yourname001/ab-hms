@@ -69,8 +69,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('bookings/decline/{booking}', 'BookingsController@decline')->name('bookings.decline');
 
     // payments
-    Route::delete('payments/destroy', 'PaymentsController@massDestroy')->name('payments.massDestroy');
     Route::resource('payments', 'PaymentsController');
+    Route::delete('payments/destroy', 'PaymentsController@massDestroy')->name('payments.massDestroy');
 
     // payments
     // Route::get('admin/payments/create', 'Admin\BookingsController@createPayment')->name('admin.payments.create');

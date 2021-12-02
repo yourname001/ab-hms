@@ -1,4 +1,4 @@
-<form action="{{ route('payments.store') }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+<form action="{{ route('admin.payments.store') }}" method="POST" autocomplete="off" enctype="multipart/form-data">
     @csrf
     <input type="hidden" name="booking_id" value="{{ $booking->id }}">
     <div class="modal fade" id="bookingPayment" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
@@ -22,9 +22,7 @@
                             <br>
                             <img src="{{ asset('images/qrcode.jpg') }}" alt="" class="img-thumbnail" style="border: none; background-color: transparent" width="250px">
                             <br>
-                            <strong>or</strong>
                             <br>
-                            <strong>Use this GCash Number: 09123456789</strong>
                         </div>
                         <div class="form-group">
                             <strong>Take a screenshot of your payment and upload the image using the button below.</strong>

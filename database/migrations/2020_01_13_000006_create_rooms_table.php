@@ -22,7 +22,7 @@ class CreateRoomsTable extends Migration
             $table->text('description')->nullable();
             $table->text('image')->nullable();
             $table->timestamps();
-            $table->softDeletes();
+            
         });
     }
 

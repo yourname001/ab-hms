@@ -332,13 +332,11 @@ class BookingsController extends Controller
 
     public function decline(Request $request, Booking $booking)
     {
-
-        Mail::to($booking->client->email)->send(new DeclineBooking($booking));
-
         $booking->update([
             'booking_status' => 'declined',
             'decline_reason' => $request->decline_reason
         ]);
+        Mail::to($booking->client->email)->send(new DeclineBooking($booking));
 
         return redirect()->route('admin.bookings.show', $booking->id);
     }

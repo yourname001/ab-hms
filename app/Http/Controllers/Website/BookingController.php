@@ -97,6 +97,7 @@ class BookingController extends Controller
             $fileName = $booking->id . '_' . date('m-d-Y H.i.s') . '.' . $image->getClientOriginalExtension();
             Storage::disk('upload')->putFileAs('images/proof-of-identity/', $image, $fileName);
             $booking->update([
+                'type_of_identification' => $request->get('type_of_identification'),
                 'proof_of_identity' => $fileName
             ]);
         }

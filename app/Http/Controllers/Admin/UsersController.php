@@ -76,7 +76,7 @@ class UsersController extends Controller
 
         return redirect()->route('admin.users.index');
 
-        return redirect()->route('admin.users.index');
+        // return redirect()->route('admin.users.index');
     }
 
     public function show(User $user)

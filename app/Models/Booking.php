@@ -4,23 +4,23 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Booking extends Model
 {
-    use SoftDeletes;
+    
 
     public $table = 'bookings';
 
     /* protected $dates = [
         'updated_at',
         'created_at',
-        'deleted_at',
         'booking_date_from',
         'booking_date_to',
     ]; */
 
     protected $fillable = [
+        'type_of_identification',
         'proof_of_identity',
         'room_id',
         'user_id',
@@ -31,9 +31,9 @@ class Booking extends Model
         'booking_status',
         'reason_of_cancellation',
         'other_reasons',
+        'decline_reason',
         'created_at',
         'updated_at',
-        'deleted_at',
     ];
 
     public function room()

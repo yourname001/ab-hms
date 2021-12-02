@@ -34,6 +34,15 @@
                             </div>
                             <div class="form-group">
                                 <label>Proof of Identity</label>
+                                <select name="type_of_identification" class="form-control select2" required style="width: 100%">
+                                    <option></option>
+                                    <option value="Valid Driver's License">Valid Driver's License</option>
+                                    <option value="State-issued Identification Card">State-issued Identification Card</option>
+                                    <option value="Student Identification Card">Student Identification Card</option>
+                                    <option value="Social Security Card">Social Security Card</option>
+                                    <option value="Military Identification Card">Military Identification Card</option>
+                                    <option value="Passport">Passport</option>
+                                </select>
                                 <div class="row justify-content-center">
                                     <div class="form-group col-md-6">
                                         <img id="img" width="100%" class="img-thumbnail" style="border: none; background-color: transparent" src="{{ asset('images/image-icon.png') }}" />

@@ -9,6 +9,10 @@
     <label>Booking Details:</label>
     <ul style="list-style-type: none">
         <li>
+            <label>Reason: </label>
+            {{ $booking->decline_reason }}
+        </li>
+        <li>
             <label>Date: </label>
             {{ date("F d, Y", strtotime($booking->booking_date_from)) }}
             -
